@@ -37,6 +37,26 @@ install.packages('dplyr')
 <!-- make individual factor variables in function user inputtable -->
 
 
+library(readr)
+austinHousingData2 <- read_csv("austinHousingData2.csv")
+
+<!-- cleaned -->
+library(readr)
+austinHousingDataClean1 <- read_csv("austinHousingDataClean1.csv")
+
+```{r}
+# need to convert T/F data to 0/1 first
+input <- austinHousingData2[,c("variable","variable")]
+model <- lm(latestPrice~propertyTaxRate+garageSpaces+hasCooling, data = input)
+
+```
+
+```{r}
+# some replicable function that takes in variables from multivariate regression above with default values set to random distribution output, and returns price
+```
+
+
+
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
 
