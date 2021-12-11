@@ -37,22 +37,305 @@ install.packages('dplyr')
 <!-- make individual factor variables in function user inputtable -->
 
 
+<!-- reading in data -->
 library(readr)
 austinHousingData2 <- read_csv("austinHousingData2.csv")
 
 <!-- cleaned -->
 library(readr)
 austinHousingDataClean1 <- read_csv("austinHousingDataClean1.csv")
+str(austinHousingDataClean1)
+
+<!-- could turn city/zipcode column into many dummy variables but I don't feel like it so I'm only going to skip for now -->
+
+
 
 ```{r}
 # need to convert T/F data to 0/1 first
-input <- austinHousingData2[,c("variable","variable")]
-model <- lm(latestPrice~propertyTaxRate+garageSpaces+hasCooling, data = input)
+#initial regression
+input <- austinHousingDataClean1[,c("latestPrice","propertyTaxRate", "garageSpaces", "hasCooling", "hasGarage", "hasAssociation", "hasHeating", "hasSpa", "hasView", "parkingSpaces", "yearBuilt", "numOfPhotos", "numOfAccessibilityFeatures", "numOfAppliances", "numOfParkingFeatures", "numOfPatioAndPorchFeatures", "numOfSecurityFeatures", "numOfWaterfrontFeatures", "numOfWindowFeatures", "numOfCommunityFeatures", "lotSizeSqFt", "livingAreaSqFt", "numOfPrimarySchools", "numOfElementarySchools", "numOfMiddleSchools", "numOfHighSchools", "avgSchoolDistance", "avgSchoolRating", "avgSchoolSize", "MedianStudentsPerTeacher", "numOfBathrooms", "numOfBedrooms", "numOfStories")]
+model <- lm(latestPrice~propertyTaxRate+garageSpaces+hasCooling+hasGarage+hasAssociation+hasHeating+hasSpa+hasView+parkingSpaces+yearBuilt+numOfPhotos+numOfAccessibilityFeatures+numOfAppliances+numOfParkingFeatures+numOfPatioAndPorchFeatures+numOfSecurityFeatures+numOfWaterfrontFeatures+numOfWindowFeatures+numOfCommunityFeatures+lotSizeSqFt+livingAreaSqFt+numOfPrimarySchools+numOfElementarySchools+numOfMiddleSchools+numOfHighSchools+avgSchoolDistance+avgSchoolRating+avgSchoolSize+MedianStudentsPerTeacher+numOfBathrooms+numOfBedrooms+numOfStories, data = input)
+#printing the model shows all the coefficients. some of the signs don't really make sense tbh (ex.: why does having more bedrooms decrease the price??)
+print(model)
 
 ```
 
+<!-- some function that takes in all numeric columns from data and gets overall coefficients on each variable in a multivariate regression on price -->
+
+
 ```{r}
-# some replicable function that takes in variables from multivariate regression above with default values set to random distribution output, and returns price
+#generates random property tax rate
+propertyTaxRateGen <- function(){
+  rates <- sample(austinHousingDataClean1$propertyTaxRate, 5, replace=TRUE)
+  return(mean(rates))
+}
+```
+
+```{r}
+#generates random number of garage spaces
+garageSpacesGen <- function(){
+  spaces <- sample(austinHousingDataClean1$garageSpaces, 5, replace=TRUE)
+  return(mean(spaces))
+}
+```
+
+```{r}
+#generates random cooling boolean
+hasCoolingGen <- function(){
+  samp <- sample(austinHousingDataClean1$hasCooling, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random garage boolean
+hasGarageGen <- function(){
+  samp <- sample(austinHousingDataClean1$hasGarage, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random HOA boolean
+hasAssociationGen <- function(){
+  samp <- sample(austinHousingDataClean1$hasAssociation, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random heating boolean
+hasHeatingGen <- function(){
+  samp <- sample(austinHousingDataClean1$hasHeating, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random spa boolean
+hasSpaGen <- function(){
+  samp <- sample(austinHousingDataClean1$hasSpa, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random view boolean
+hasViewGen <- function(){
+  samp <- sample(austinHousingDataClean1$hasView, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random number of parking spaces
+parkingSpacesGen <- function(){
+  samp <- sample(austinHousingDataClean1$parkingSpaces, 5, replace=TRUE)
+  return(mean(samp))
+}
+```
+
+```{r}
+#generates random year built
+yearBuiltGen <- function(){
+  samp <- sample(austinHousingDataClean1$yearBuiltGen, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random number of price changes on listing
+priceChangesGen <- function(){
+  samp <- sample(austinHousingDataClean1$numPriceChanges, 5, replace=TRUE)
+  return(mean(samp))
+}
+```
+
+```{r}
+#generates random number of photos on listing
+numPhotosGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfPhotos, 5, replace=TRUE)
+  return(mean(samp))
+}
+```
+
+```{r}
+#generates random number of accessibility features
+numAccessGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfAccessibilityFeatures, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random number of appliances
+numAppGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfAppliances, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random number of patio/porch features
+numPatPorchGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfPatioAndPorchFeatures, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random number of security features
+numSecurityGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfSecurityFeatures, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random number of waterfront features
+numWaterfrontGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfWaterfrontFeatures, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random number of window features
+numWindowFeaturesGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfWindowFeatures, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random number of patio/porch features
+numCommGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfCommunityFeatures, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random lot size in sq ft
+SqFtGen <- function(){
+  samp <- sample(austinHousingDataClean1$lotSizeSqFt, 5, replace=TRUE)
+  return(mean(samp))
+}
+```
+
+```{r}
+#generates random area of living area in sq ft
+livSqFtGen <- function(){
+  samp <- sample(austinHousingDataClean1$livingAreaSqFt, 5, replace=TRUE)
+  return(mean(samp))
+}
+```
+
+```{r}
+#generates random number of primary schools in area
+numPrimaryGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfPrimarySchools, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random number of elementary schools in area
+numElementaryGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfElementarySchools, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random number of middle schools in area
+numMiddleGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfMiddleSchools, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random number of high schools in area
+numHighGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfHighSchools, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random distance to nearest school
+numSchoolDistGen <- function(){
+  samp <- sample(austinHousingDataClean1$avgSchoolDistance, 5, replace=TRUE)
+  return(mean(samp))
+}
+```
+
+```{r}
+#generates random average area school rating
+schoolRatingGen <- function(){
+  samp <- sample(austinHousingDataClean1$avgSchoolRating, 5, replace=TRUE)
+  return(mean(samp))
+}
+```
+
+```{r}
+#generates random number of students at nearest school
+schoolSizeGen <- function(){
+  samp <- sample(austinHousingDataClean1$avgSchoolSize, 5, replace=TRUE)
+  return(mean(samp))
+}
+```
+
+```{r}
+#generates random student-teacher ratio
+stuTeachRatioGen <- function(){
+  samp <- sample(austinHousingDataClean1$MedianStudentsPerTeacher, 5, replace=TRUE)
+  return(mean(samp))
+}
+```
+
+```{r}
+#generates random number of bathrooms
+numBathGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfBathrooms, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random number of bedrooms
+numBedGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfBedrooms, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+```{r}
+#generates random number of stories
+numStoriesGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfStories, 1, replace=TRUE)
+  return(samp)
+}
+```
+
+
+
+<!-- dummy variables -->
+install.packages('fastDummies')
+library('fastDummies')
+
+austinHousingDataClean1 <- dummy_cols(austinHousingDataClean1, select_columns = c('city', 'zipcode', 'homeType', 'latest_salemonth', 'latest_saleyear'))
+<!-- remember to hard code in these dummy variables in the main regression model, so that city/zipcode at least do not have randomized assumptions. can randomly assign hometype and month/year though -->
+
+
+
+```{r}
+# some replicable function that takes in coefficients/variables from multivariate regression above with default values set to random distribution output, and returns price
+
+priceFinder <- function(propTR = randombydefaultunlessuserinputsanumber){
+  
+}
 ```
 
 
