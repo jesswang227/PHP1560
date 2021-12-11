@@ -243,23 +243,419 @@ In the app, users can input factors about a house and the simulation will return
 <!-- then create regression with price as y variable and other variables as multivariate -->
 <!-- create function that takes different factors as parameters and returns price based on regression and randomly generated missing variables -->
 <!-- make individual factor variables in function user inputtable -->
+<!-- reading in data -->
 <p>library(readr) austinHousingData2 &lt;- read_csv(“austinHousingData2.csv”)</p>
 <!-- cleaned -->
-<p>library(readr) austinHousingDataClean1 &lt;- read_csv(“austinHousingDataClean1.csv”)</p>
+<p>library(readr) austinHousingDataClean1 &lt;- read_csv(“austinHousingDataClean1.csv”) str(austinHousingDataClean1)</p>
+<!-- could turn city/zipcode column into many dummy variables but I don't feel like it so I'm only going to skip for now -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBuZWVkIHRvIGNvbnZlcnQgVC9GIGRhdGEgdG8gMC8xIGZpcnN0XG5pbnB1dCA8LSBhdXN0aW5Ib3VzaW5nRGF0YTJbLGMoXCJ2YXJpYWJsZVwiLFwidmFyaWFibGVcIildXG5tb2RlbCA8LSBsbShsYXRlc3RQcmljZX5wcm9wZXJ0eVRheFJhdGUrZ2FyYWdlU3BhY2VzK2hhc0Nvb2xpbmcsIGRhdGEgPSBpbnB1dClcblxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBuZWVkIHRvIGNvbnZlcnQgVC9GIGRhdGEgdG8gMC8xIGZpcnN0XG4jaW5pdGlhbCByZWdyZXNzaW9uXG5pbnB1dCA8LSBhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMVssYyhcImxhdGVzdFByaWNlXCIsXCJwcm9wZXJ0eVRheFJhdGVcIiwgXCJnYXJhZ2VTcGFjZXNcIiwgXCJoYXNDb29saW5nXCIsIFwiaGFzR2FyYWdlXCIsIFwiaGFzQXNzb2NpYXRpb25cIiwgXCJoYXNIZWF0aW5nXCIsIFwiaGFzU3BhXCIsIFwiaGFzVmlld1wiLCBcInBhcmtpbmdTcGFjZXNcIiwgXCJ5ZWFyQnVpbHRcIiwgXCJudW1PZlBob3Rvc1wiLCBcIm51bU9mQWNjZXNzaWJpbGl0eUZlYXR1cmVzXCIsIFwibnVtT2ZBcHBsaWFuY2VzXCIsIFwibnVtT2ZQYXJraW5nRmVhdHVyZXNcIiwgXCJudW1PZlBhdGlvQW5kUG9yY2hGZWF0dXJlc1wiLCBcIm51bU9mU2VjdXJpdHlGZWF0dXJlc1wiLCBcIm51bU9mV2F0ZXJmcm9udEZlYXR1cmVzXCIsIFwibnVtT2ZXaW5kb3dGZWF0dXJlc1wiLCBcIm51bU9mQ29tbXVuaXR5RmVhdHVyZXNcIiwgXCJsb3RTaXplU3FGdFwiLCBcImxpdmluZ0FyZWFTcUZ0XCIsIFwibnVtT2ZQcmltYXJ5U2Nob29sc1wiLCBcIm51bU9mRWxlbWVudGFyeVNjaG9vbHNcIiwgXCJudW1PZk1pZGRsZVNjaG9vbHNcIiwgXCJudW1PZkhpZ2hTY2hvb2xzXCIsIFwiYXZnU2Nob29sRGlzdGFuY2VcIiwgXCJhdmdTY2hvb2xSYXRpbmdcIiwgXCJhdmdTY2hvb2xTaXplXCIsIFwiTWVkaWFuU3R1ZGVudHNQZXJUZWFjaGVyXCIsIFwibnVtT2ZCYXRocm9vbXNcIiwgXCJudW1PZkJlZHJvb21zXCIsIFwibnVtT2ZTdG9yaWVzXCIpXVxubW9kZWwgPC0gbG0obGF0ZXN0UHJpY2V+cHJvcGVydHlUYXhSYXRlK2dhcmFnZVNwYWNlcytoYXNDb29saW5nK2hhc0dhcmFnZStoYXNBc3NvY2lhdGlvbitoYXNIZWF0aW5nK2hhc1NwYStoYXNWaWV3K3BhcmtpbmdTcGFjZXMreWVhckJ1aWx0K251bU9mUGhvdG9zK251bU9mQWNjZXNzaWJpbGl0eUZlYXR1cmVzK251bU9mQXBwbGlhbmNlcytudW1PZlBhcmtpbmdGZWF0dXJlcytudW1PZlBhdGlvQW5kUG9yY2hGZWF0dXJlcytudW1PZlNlY3VyaXR5RmVhdHVyZXMrbnVtT2ZXYXRlcmZyb250RmVhdHVyZXMrbnVtT2ZXaW5kb3dGZWF0dXJlcytudW1PZkNvbW11bml0eUZlYXR1cmVzK2xvdFNpemVTcUZ0K2xpdmluZ0FyZWFTcUZ0K251bU9mUHJpbWFyeVNjaG9vbHMrbnVtT2ZFbGVtZW50YXJ5U2Nob29scytudW1PZk1pZGRsZVNjaG9vbHMrbnVtT2ZIaWdoU2Nob29scythdmdTY2hvb2xEaXN0YW5jZSthdmdTY2hvb2xSYXRpbmcrYXZnU2Nob29sU2l6ZStNZWRpYW5TdHVkZW50c1BlclRlYWNoZXIrbnVtT2ZCYXRocm9vbXMrbnVtT2ZCZWRyb29tcytudW1PZlN0b3JpZXMsIGRhdGEgPSBpbnB1dClcbnByaW50KG1vZGVsKVxuYGBgIn0= -->
 <pre class="r"><code># need to convert T/F data to 0/1 first
-input &lt;- austinHousingData2[,c(&quot;variable&quot;,&quot;variable&quot;)]
-model &lt;- lm(latestPrice~propertyTaxRate+garageSpaces+hasCooling, data = input)
-</code></pre>
+#initial regression
+input &lt;- austinHousingDataClean1[,c(&quot;latestPrice&quot;,&quot;propertyTaxRate&quot;, &quot;garageSpaces&quot;, &quot;hasCooling&quot;, &quot;hasGarage&quot;, &quot;hasAssociation&quot;, &quot;hasHeating&quot;, &quot;hasSpa&quot;, &quot;hasView&quot;, &quot;parkingSpaces&quot;, &quot;yearBuilt&quot;, &quot;numOfPhotos&quot;, &quot;numOfAccessibilityFeatures&quot;, &quot;numOfAppliances&quot;, &quot;numOfParkingFeatures&quot;, &quot;numOfPatioAndPorchFeatures&quot;, &quot;numOfSecurityFeatures&quot;, &quot;numOfWaterfrontFeatures&quot;, &quot;numOfWindowFeatures&quot;, &quot;numOfCommunityFeatures&quot;, &quot;lotSizeSqFt&quot;, &quot;livingAreaSqFt&quot;, &quot;numOfPrimarySchools&quot;, &quot;numOfElementarySchools&quot;, &quot;numOfMiddleSchools&quot;, &quot;numOfHighSchools&quot;, &quot;avgSchoolDistance&quot;, &quot;avgSchoolRating&quot;, &quot;avgSchoolSize&quot;, &quot;MedianStudentsPerTeacher&quot;, &quot;numOfBathrooms&quot;, &quot;numOfBedrooms&quot;, &quot;numOfStories&quot;)]
+model &lt;- lm(latestPrice~propertyTaxRate+garageSpaces+hasCooling+hasGarage+hasAssociation+hasHeating+hasSpa+hasView+parkingSpaces+yearBuilt+numOfPhotos+numOfAccessibilityFeatures+numOfAppliances+numOfParkingFeatures+numOfPatioAndPorchFeatures+numOfSecurityFeatures+numOfWaterfrontFeatures+numOfWindowFeatures+numOfCommunityFeatures+lotSizeSqFt+livingAreaSqFt+numOfPrimarySchools+numOfElementarySchools+numOfMiddleSchools+numOfHighSchools+avgSchoolDistance+avgSchoolRating+avgSchoolSize+MedianStudentsPerTeacher+numOfBathrooms+numOfBedrooms+numOfStories, data = input)
+print(model)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IGxhdGVzdFByaWNlIH4gcHJvcGVydHlUYXhSYXRlICsgZ2FyYWdlU3BhY2VzICsgaGFzQ29vbGluZyArIFxuICAgIGhhc0dhcmFnZSArIGhhc0Fzc29jaWF0aW9uICsgaGFzSGVhdGluZyArIGhhc1NwYSArIGhhc1ZpZXcgKyBcbiAgICBwYXJraW5nU3BhY2VzICsgeWVhckJ1aWx0ICsgbnVtT2ZQaG90b3MgKyBudW1PZkFjY2Vzc2liaWxpdHlGZWF0dXJlcyArIFxuICAgIG51bU9mQXBwbGlhbmNlcyArIG51bU9mUGFya2luZ0ZlYXR1cmVzICsgbnVtT2ZQYXRpb0FuZFBvcmNoRmVhdHVyZXMgKyBcbiAgICBudW1PZlNlY3VyaXR5RmVhdHVyZXMgKyBudW1PZldhdGVyZnJvbnRGZWF0dXJlcyArIG51bU9mV2luZG93RmVhdHVyZXMgKyBcbiAgICBudW1PZkNvbW11bml0eUZlYXR1cmVzICsgbG90U2l6ZVNxRnQgKyBsaXZpbmdBcmVhU3FGdCArIG51bU9mUHJpbWFyeVNjaG9vbHMgKyBcbiAgICBudW1PZkVsZW1lbnRhcnlTY2hvb2xzICsgbnVtT2ZNaWRkbGVTY2hvb2xzICsgbnVtT2ZIaWdoU2Nob29scyArIFxuICAgIGF2Z1NjaG9vbERpc3RhbmNlICsgYXZnU2Nob29sUmF0aW5nICsgYXZnU2Nob29sU2l6ZSArIE1lZGlhblN0dWRlbnRzUGVyVGVhY2hlciArIFxuICAgIG51bU9mQmF0aHJvb21zICsgbnVtT2ZCZWRyb29tcyArIG51bU9mU3RvcmllcywgZGF0YSA9IGlucHV0KVxuXG5Db2VmZmljaWVudHM6XG4gICAgICAgICAgICAgICAoSW50ZXJjZXB0KSAgICAgICAgICAgICBwcm9wZXJ0eVRheFJhdGUgICAgICAgICAgICAgICAgZ2FyYWdlU3BhY2VzICAgICAgICAgICAgICAgICAgaGFzQ29vbGluZyAgXG4gICAgICAgICAgICAgICAgIDQuMTc3ZSswNiAgICAgICAgICAgICAgICAgIC0xLjAxNmUrMDYgICAgICAgICAgICAgICAgICAgNy4zNzFlKzA0ICAgICAgICAgICAgICAgICAgLTEuMjUxZSswNSAgXG4gICAgICAgICAgICAgICAgIGhhc0dhcmFnZSAgICAgICAgICAgICAgaGFzQXNzb2NpYXRpb24gICAgICAgICAgICAgICAgICBoYXNIZWF0aW5nICAgICAgICAgICAgICAgICAgICAgIGhhc1NwYSAgXG4gICAgICAgICAgICAgICAgLTYuODM5ZSswNCAgICAgICAgICAgICAgICAgIC0xLjUxMGUrMDUgICAgICAgICAgICAgICAgICAtMS4yNTdlKzA0ICAgICAgICAgICAgICAgICAgIDcuNTU3ZSswNCAgXG4gICAgICAgICAgICAgICAgICAgaGFzVmlldyAgICAgICAgICAgICAgIHBhcmtpbmdTcGFjZXMgICAgICAgICAgICAgICAgICAgeWVhckJ1aWx0ICAgICAgICAgICAgICAgICBudW1PZlBob3RvcyAgXG4gICAgICAgICAgICAgICAgIDMuMTc0ZSswNCAgICAgICAgICAgICAgICAgIC02LjQ2MmUrMDQgICAgICAgICAgICAgICAgICAtOS43NjdlKzAyICAgICAgICAgICAgICAgICAgIDYuNTg3ZSswMiAgXG5udW1PZkFjY2Vzc2liaWxpdHlGZWF0dXJlcyAgICAgICAgICAgICBudW1PZkFwcGxpYW5jZXMgICAgICAgIG51bU9mUGFya2luZ0ZlYXR1cmVzICBudW1PZlBhdGlvQW5kUG9yY2hGZWF0dXJlcyAgXG4gICAgICAgICAgICAgICAgIDEuMjg5ZSswNCAgICAgICAgICAgICAgICAgIC0yLjk4NmUrMDMgICAgICAgICAgICAgICAgICAgNC4zMDllKzA0ICAgICAgICAgICAgICAgICAgIDEuMzc5ZSswNCAgXG4gICAgIG51bU9mU2VjdXJpdHlGZWF0dXJlcyAgICAgbnVtT2ZXYXRlcmZyb250RmVhdHVyZXMgICAgICAgICBudW1PZldpbmRvd0ZlYXR1cmVzICAgICAgbnVtT2ZDb21tdW5pdHlGZWF0dXJlcyAgXG4gICAgICAgICAgICAgICAgIDIuNzI0ZSswMyAgICAgICAgICAgICAgICAgICA2LjQwMGUrMDUgICAgICAgICAgICAgICAgICAtMy4zNzhlKzAzICAgICAgICAgICAgICAgICAgLTUuNDQ2ZSswNCAgXG4gICAgICAgICAgICAgICBsb3RTaXplU3FGdCAgICAgICAgICAgICAgbGl2aW5nQXJlYVNxRnQgICAgICAgICBudW1PZlByaW1hcnlTY2hvb2xzICAgICAgbnVtT2ZFbGVtZW50YXJ5U2Nob29scyAgXG4gICAgICAgICAgICAgICAgIDQuNjExZS0wNCAgICAgICAgICAgICAgICAgICA4LjcxMWUrMDEgICAgICAgICAgICAgICAgICAgMS42MjNlKzA1ICAgICAgICAgICAgICAgICAgIDIuMTA0ZSswNSAgXG4gICAgICAgIG51bU9mTWlkZGxlU2Nob29scyAgICAgICAgICAgIG51bU9mSGlnaFNjaG9vbHMgICAgICAgICAgIGF2Z1NjaG9vbERpc3RhbmNlICAgICAgICAgICAgIGF2Z1NjaG9vbFJhdGluZyAgXG4gICAgICAgICAgICAgICAgLTQuMTExZSswNCAgICAgICAgICAgICAgICAgIC05LjIyMWUrMDQgICAgICAgICAgICAgICAgICAtNC41OTFlKzAzICAgICAgICAgICAgICAgICAgIDUuMjU0ZSswNCAgXG4gICAgICAgICAgICAgYXZnU2Nob29sU2l6ZSAgICBNZWRpYW5TdHVkZW50c1BlclRlYWNoZXIgICAgICAgICAgICAgIG51bU9mQmF0aHJvb21zICAgICAgICAgICAgICAgbnVtT2ZCZWRyb29tcyAgXG4gICAgICAgICAgICAgICAgLTkuODA0ZSswMSAgICAgICAgICAgICAgICAgIC0xLjU2NmUrMDQgICAgICAgICAgICAgICAgICAgMi4wMTFlKzA1ICAgICAgICAgICAgICAgICAgLTQuNDUyZSswNCAgXG4gICAgICAgICAgICAgIG51bU9mU3RvcmllcyAgXG4gICAgICAgICAgICAgICAgLTcuNjg5ZSswNCAgXG4ifQ== -->
+<pre><code>
+Call:
+lm(formula = latestPrice ~ propertyTaxRate + garageSpaces + hasCooling + 
+    hasGarage + hasAssociation + hasHeating + hasSpa + hasView + 
+    parkingSpaces + yearBuilt + numOfPhotos + numOfAccessibilityFeatures + 
+    numOfAppliances + numOfParkingFeatures + numOfPatioAndPorchFeatures + 
+    numOfSecurityFeatures + numOfWaterfrontFeatures + numOfWindowFeatures + 
+    numOfCommunityFeatures + lotSizeSqFt + livingAreaSqFt + numOfPrimarySchools + 
+    numOfElementarySchools + numOfMiddleSchools + numOfHighSchools + 
+    avgSchoolDistance + avgSchoolRating + avgSchoolSize + MedianStudentsPerTeacher + 
+    numOfBathrooms + numOfBedrooms + numOfStories, data = input)
+
+Coefficients:
+               (Intercept)             propertyTaxRate                garageSpaces                  hasCooling  
+                 4.177e+06                  -1.016e+06                   7.371e+04                  -1.251e+05  
+                 hasGarage              hasAssociation                  hasHeating                      hasSpa  
+                -6.839e+04                  -1.510e+05                  -1.257e+04                   7.557e+04  
+                   hasView               parkingSpaces                   yearBuilt                 numOfPhotos  
+                 3.174e+04                  -6.462e+04                  -9.767e+02                   6.587e+02  
+numOfAccessibilityFeatures             numOfAppliances        numOfParkingFeatures  numOfPatioAndPorchFeatures  
+                 1.289e+04                  -2.986e+03                   4.309e+04                   1.379e+04  
+     numOfSecurityFeatures     numOfWaterfrontFeatures         numOfWindowFeatures      numOfCommunityFeatures  
+                 2.724e+03                   6.400e+05                  -3.378e+03                  -5.446e+04  
+               lotSizeSqFt              livingAreaSqFt         numOfPrimarySchools      numOfElementarySchools  
+                 4.611e-04                   8.711e+01                   1.623e+05                   2.104e+05  
+        numOfMiddleSchools            numOfHighSchools           avgSchoolDistance             avgSchoolRating  
+                -4.111e+04                  -9.221e+04                  -4.591e+03                   5.254e+04  
+             avgSchoolSize    MedianStudentsPerTeacher              numOfBathrooms               numOfBedrooms  
+                -9.804e+01                  -1.566e+04                   2.011e+05                  -4.452e+04  
+              numOfStories  
+                -7.689e+04  </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- some function that takes in all numeric columns from data and gets overall coefficients on each variable in a multivariate regression on price -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gcHJvcGVydHkgdGF4IHJhdGVcbnByb3BlcnR5VGF4UmF0ZUdlbiA8LSBmdW5jdGlvbigpe1xuICByYXRlcyA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkcHJvcGVydHlUYXhSYXRlLCA1LCByZXBsYWNlPVRSVUUpXG4gIHByaW50KG1lYW4ocmF0ZXMpKVxufVxuYGBgIn0= -->
+<pre class="r"><code>#generates random property tax rate
+propertyTaxRateGen &lt;- function(){
+  rates &lt;- sample(austinHousingDataClean1$propertyTaxRate, 5, replace=TRUE)
+  print(mean(rates))
+}</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBzb21lIHJlcGxpY2FibGUgZnVuY3Rpb24gdGhhdCB0YWtlcyBpbiB2YXJpYWJsZXMgZnJvbSBtdWx0aXZhcmlhdGUgcmVncmVzc2lvbiBhYm92ZSB3aXRoIGRlZmF1bHQgdmFsdWVzIHNldCB0byByYW5kb20gZGlzdHJpYnV0aW9uIG91dHB1dCwgYW5kIHJldHVybnMgcHJpY2VcbmBgYCJ9 -->
-<pre class="r"><code># some replicable function that takes in variables from multivariate regression above with default values set to random distribution output, and returns price</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIGdhcmFnZSBzcGFjZXNcbmdhcmFnZVNwYWNlc0dlbiA8LSBmdW5jdGlvbigpe1xuICBzcGFjZXMgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJGdhcmFnZVNwYWNlcywgNSwgcmVwbGFjZT1UUlVFKVxuICBwcmludChtZWFuKHNwYWNlcykpXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random number of garage spaces
+garageSpacesGen &lt;- function(){
+  spaces &lt;- sample(austinHousingDataClean1$garageSpaces, 5, replace=TRUE)
+  print(mean(spaces))
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gY29vbGluZyBib29sZWFuXG5nYXJhZ2VTcGFjZXNHZW4gPC0gZnVuY3Rpb24oKXtcbiAgc3BhY2VzIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRoYXNDb29saW5nLCAxLCByZXBsYWNlPVRSVUUpXG4gIHJldHVybihzcGFjZXMpXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random cooling boolean
+garageSpacesGen &lt;- function(){
+  spaces &lt;- sample(austinHousingDataClean1$hasCooling, 1, replace=TRUE)
+  return(spaces)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gZ2FyYWdlIGJvb2xlYW5cbmhhc0dhcmFnZUdlbiA8LSBmdW5jdGlvbigpe1xuICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRoYXNHYXJhZ2UsIDEsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKHNhbXApXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random garage boolean
+hasGarageGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$hasGarage, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gSE9BIGJvb2xlYW5cbmhhc0Fzc29jaWF0aW9uR2VuIDwtIGZ1bmN0aW9uKCl7XG4gIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJGhhc0Fzc29jaWF0aW9uLCAxLCByZXBsYWNlPVRSVUUpXG4gIHJldHVybihzYW1wKVxufVxuYGBgIn0= -->
+<pre class="r"><code>#generates random HOA boolean
+hasAssociationGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$hasAssociation, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gaGVhdGluZyBib29sZWFuXG5oYXNIZWF0aW5nR2VuIDwtIGZ1bmN0aW9uKCl7XG4gIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJGhhc0hlYXRpbmcsIDEsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKHNhbXApXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random heating boolean
+hasHeatingGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$hasHeating, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gc3BhIGJvb2xlYW5cbmhhc1NwYUdlbiA8LSBmdW5jdGlvbigpe1xuICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRoYXNTcGEsIDEsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKHNhbXApXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random spa boolean
+hasSpaGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$hasSpa, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gdmlldyBib29sZWFuXG5oYXNWaWV3R2VuIDwtIGZ1bmN0aW9uKCl7XG4gIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJGhhc1ZpZXcsIDEsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKHNhbXApXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random view boolean
+hasViewGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$hasView, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIHBhcmtpbmcgc3BhY2VzXG5wYXJraW5nU3BhY2VzR2VuIDwtIGZ1bmN0aW9uKCl7XG4gIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJHBhcmtpbmdTcGFjZXMsIDUsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKG1lYW4oc2FtcCkpXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random number of parking spaces
+parkingSpacesGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$parkingSpaces, 5, replace=TRUE)
+  return(mean(samp))
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20geWVhciBidWlsdFxueWVhckJ1aWx0R2VuIDwtIGZ1bmN0aW9uKCl7XG4gIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJHllYXJCdWlsdEdlbiwgMSwgcmVwbGFjZT1UUlVFKVxuICByZXR1cm4oc2FtcClcbn1cbmBgYCJ9 -->
+<pre class="r"><code>#generates random year built
+yearBuiltGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$yearBuiltGen, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIHByaWNlIGNoYW5nZXMgb24gbGlzdGluZ1xucHJpY2VDaGFuZ2VzR2VuIDwtIGZ1bmN0aW9uKCl7XG4gIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJG51bVByaWNlQ2hhbmdlcywgNSwgcmVwbGFjZT1UUlVFKVxuICByZXR1cm4obWVhbihzYW1wKSlcbn1cbmBgYCJ9 -->
+<pre class="r"><code>#generates random number of price changes on listing
+priceChangesGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numPriceChanges, 5, replace=TRUE)
+  return(mean(samp))
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIHBob3RvcyBvbiBsaXN0aW5nXG5udW1QaG90b3NHZW4gPC0gZnVuY3Rpb24oKXtcbiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkbnVtT2ZQaG90b3MsIDUsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKG1lYW4oc2FtcCkpXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random number of photos on listing
+numPhotosGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numOfPhotos, 5, replace=TRUE)
+  return(mean(samp))
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIGFjY2Vzc2liaWxpdHkgZmVhdHVyZXNcbm51bUFjY2Vzc0dlbiA8LSBmdW5jdGlvbigpe1xuICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRudW1PZkFjY2Vzc2liaWxpdHlGZWF0dXJlcywgMSwgcmVwbGFjZT1UUlVFKVxuICByZXR1cm4oc2FtcClcbn1cbmBgYCJ9 -->
+<pre class="r"><code>#generates random number of accessibility features
+numAccessGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numOfAccessibilityFeatures, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIGFwcGxpYW5jZXNcbm51bUFwcEdlbiA8LSBmdW5jdGlvbigpe1xuICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRudW1PZkFwcGxpYW5jZXMsIDEsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKHNhbXApXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random number of appliances
+numAppGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numOfAppliances, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIHBhdGlvL3BvcmNoIGZlYXR1cmVzXG5udW1QYXRQb3JjaEdlbiA8LSBmdW5jdGlvbigpe1xuICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRudW1PZlBhdGlvQW5kUG9yY2hGZWF0dXJlcywgMSwgcmVwbGFjZT1UUlVFKVxuICByZXR1cm4oc2FtcClcbn1cbmBgYCJ9 -->
+<pre class="r"><code>#generates random number of patio/porch features
+numPatPorchGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numOfPatioAndPorchFeatures, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIHNlY3VyaXR5IGZlYXR1cmVzXG5udW1TZWN1cml0eUdlbiA8LSBmdW5jdGlvbigpe1xuICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRudW1PZlNlY3VyaXR5RmVhdHVyZXMsIDEsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKHNhbXApXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random number of security features
+numSecurityGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numOfSecurityFeatures, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIHdhdGVyZnJvbnQgZmVhdHVyZXNcbm51bVdhdGVyZnJvbnRHZW4gPC0gZnVuY3Rpb24oKXtcbiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkbnVtT2ZXYXRlcmZyb250RmVhdHVyZXMsIDEsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKHNhbXApXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random number of waterfront features
+numWaterfrontGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numOfWaterfrontFeatures, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIHdpbmRvdyBmZWF0dXJlc1xubnVtV2luZG93RmVhdHVyZXNHZW4gPC0gZnVuY3Rpb24oKXtcbiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkbnVtT2ZXaW5kb3dGZWF0dXJlcywgMSwgcmVwbGFjZT1UUlVFKVxuICByZXR1cm4oc2FtcClcbn1cbmBgYCJ9 -->
+<pre class="r"><code>#generates random number of window features
+numWindowFeaturesGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numOfWindowFeatures, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIHBhdGlvL3BvcmNoIGZlYXR1cmVzXG5udW1Db21tR2VuIDwtIGZ1bmN0aW9uKCl7XG4gIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJG51bU9mQ29tbXVuaXR5RmVhdHVyZXMsIDEsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKHNhbXApXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random number of patio/porch features
+numCommGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numOfCommunityFeatures, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbG90IHNpemUgaW4gc3EgZnRcblNxRnRHZW4gPC0gZnVuY3Rpb24oKXtcbiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkbG90U2l6ZVNxRnQsIDUsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKG1lYW4oc2FtcCkpXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random lot size in sq ft
+SqFtGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$lotSizeSqFt, 5, replace=TRUE)
+  return(mean(samp))
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gYXJlYSBvZiBsaXZpbmcgYXJlYSBpbiBzcSBmdFxubGl2U3FGdEdlbiA8LSBmdW5jdGlvbigpe1xuICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRsaXZpbmdBcmVhU3FGdCwgNSwgcmVwbGFjZT1UUlVFKVxuICByZXR1cm4obWVhbihzYW1wKSlcbn1cbmBgYCJ9 -->
+<pre class="r"><code>#generates random area of living area in sq ft
+livSqFtGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$livingAreaSqFt, 5, replace=TRUE)
+  return(mean(samp))
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIHByaW1hcnkgc2Nob29scyBpbiBhcmVhXG5udW1QcmltYXJ5R2VuIDwtIGZ1bmN0aW9uKCl7XG4gIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJG51bU9mUHJpbWFyeVNjaG9vbHMsIDEsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKHNhbXApXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random number of primary schools in area
+numPrimaryGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numOfPrimarySchools, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIGVsZW1lbnRhcnkgc2Nob29scyBpbiBhcmVhXG5udW1FbGVtZW50YXJ5R2VuIDwtIGZ1bmN0aW9uKCl7XG4gIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJG51bU9mRWxlbWVudGFyeVNjaG9vbHMsIDEsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKHNhbXApXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random number of elementary schools in area
+numElementaryGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numOfElementarySchools, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIG1pZGRsZSBzY2hvb2xzIGluIGFyZWFcbm51bU1pZGRsZUdlbiA8LSBmdW5jdGlvbigpe1xuICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRudW1PZk1pZGRsZVNjaG9vbHMsIDEsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKHNhbXApXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random number of middle schools in area
+numMiddleGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numOfMiddleSchools, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIGhpZ2ggc2Nob29scyBpbiBhcmVhXG5udW1IaWdoR2VuIDwtIGZ1bmN0aW9uKCl7XG4gIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJG51bU9mSGlnaFNjaG9vbHMsIDEsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKHNhbXApXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random number of high schools in area
+numHighGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numOfHighSchools, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gZGlzdGFuY2UgdG8gbmVhcmVzdCBzY2hvb2xcbm51bVNjaG9vbERpc3RHZW4gPC0gZnVuY3Rpb24oKXtcbiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkYXZnU2Nob29sRGlzdGFuY2UsIDUsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKG1lYW4oc2FtcCkpXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random distance to nearest school
+numSchoolDistGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$avgSchoolDistance, 5, replace=TRUE)
+  return(mean(samp))
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gYXZlcmFnZSBhcmVhIHNjaG9vbCByYXRpbmdcbnNjaG9vbFJhdGluZ0dlbiA8LSBmdW5jdGlvbigpe1xuICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRhdmdTY2hvb2xSYXRpbmcsIDUsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKG1lYW4oc2FtcCkpXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random average area school rating
+schoolRatingGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$avgSchoolRating, 5, replace=TRUE)
+  return(mean(samp))
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIHN0dWRlbnRzIGF0IG5lYXJlc3Qgc2Nob29sXG5zY2hvb2xTaXplR2VuIDwtIGZ1bmN0aW9uKCl7XG4gIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJGF2Z1NjaG9vbFNpemUsIDUsIHJlcGxhY2U9VFJVRSlcbiAgcmV0dXJuKG1lYW4oc2FtcCkpXG59XG5gYGAifQ== -->
+<pre class="r"><code>#generates random number of students at nearest school
+schoolSizeGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$avgSchoolSize, 5, replace=TRUE)
+  return(mean(samp))
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gc3R1ZGVudC10ZWFjaGVyIHJhdGlvXG5zdHVUZWFjaFJhdGlvR2VuIDwtIGZ1bmN0aW9uKCl7XG4gIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJE1lZGlhblN0dWRlbnRzUGVyVGVhY2hlciwgNSwgcmVwbGFjZT1UUlVFKVxuICByZXR1cm4obWVhbihzYW1wKSlcbn1cbmBgYCJ9 -->
+<pre class="r"><code>#generates random student-teacher ratio
+stuTeachRatioGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$MedianStudentsPerTeacher, 5, replace=TRUE)
+  return(mean(samp))
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIGJhdGhyb29tc1xubnVtQmF0aEdlbiA8LSBmdW5jdGlvbigpe1xuICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRudW1PZkJhdGhyb29tcywgMSwgcmVwbGFjZT1UUlVFKVxuICByZXR1cm4oc2FtcClcbn1cbmBgYCJ9 -->
+<pre class="r"><code>#generates random number of bathrooms
+numBathGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numOfBathrooms, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIGJlZHJvb21zXG5udW1CZWRHZW4gPC0gZnVuY3Rpb24oKXtcbiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkbnVtT2ZCZWRyb29tcywgMSwgcmVwbGFjZT1UUlVFKVxuICByZXR1cm4oc2FtcClcbn1cbmBgYCJ9 -->
+<pre class="r"><code>#generates random number of bedrooms
+numBedGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numOfBedrooms, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIHN0b3JpZXNcbm51bVN0b3JpZXNHZW4gPC0gZnVuY3Rpb24oKXtcbiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkbnVtT2ZTdG9yaWVzLCAxLCByZXBsYWNlPVRSVUUpXG4gIHJldHVybihzYW1wKVxufVxuYGBgIn0= -->
+<pre class="r"><code>#generates random number of stories
+numStoriesGen &lt;- function(){
+  samp &lt;- sample(austinHousingDataClean1$numOfStories, 1, replace=TRUE)
+  return(samp)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- dummy variables -->
+<p>install.packages(‘fastDummies’) library(‘fastDummies’)</p>
+<p>austinHousingDataClean1 &lt;- dummy_cols(austinHousingDataClean1, select_columns = c(‘city’, ‘zipcode’, ‘homeType’, ‘latest_salemonth’, ‘latest_saleyear’)) <!-- remember to hard code in these dummy variables in the main regression model, so that city/zipcode at least do not have randomized assumptions. can randomly assign hometype and month/year though --></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBzb21lIHJlcGxpY2FibGUgZnVuY3Rpb24gdGhhdCB0YWtlcyBpbiBjb2VmZmljaWVudHMvdmFyaWFibGVzIGZyb20gbXVsdGl2YXJpYXRlIHJlZ3Jlc3Npb24gYWJvdmUgd2l0aCBkZWZhdWx0IHZhbHVlcyBzZXQgdG8gcmFuZG9tIGRpc3RyaWJ1dGlvbiBvdXRwdXQsIGFuZCByZXR1cm5zIHByaWNlXG5cbnByaWNlRmluZGVyIDwtIGZ1bmN0aW9uKHByb3BUUiA9IHJhbmRvbWJ5ZGVmYXVsdHVubGVzc3VzZXJpbnB1dHNhbnVtYmVyKXtcbiAgXG59XG5gYGAifQ== -->
+<pre class="r"><code># some replicable function that takes in coefficients/variables from multivariate regression above with default values set to random distribution output, and returns price
+
+priceFinder &lt;- function(propTR = randombydefaultunlessuserinputsanumber){
+  
+}</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -268,7 +664,7 @@ model &lt;- lm(latestPrice~propertyTaxRate+garageSpaces+hasCooling, data = input
 <p>The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike <em>Knit</em>, <em>Preview</em> does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.</p>
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpUaGlzIGlzIGFuIFtSIE1hcmtkb3duXShodHRwOi8vcm1hcmtkb3duLnJzdHVkaW8uY29tKSBOb3RlYm9vay4gV2hlbiB5b3UgZXhlY3V0ZSBjb2RlIHdpdGhpbiB0aGUgbm90ZWJvb2ssIHRoZSByZXN1bHRzIGFwcGVhciBiZW5lYXRoIHRoZSBjb2RlLiANCg0KVHJ5IGV4ZWN1dGluZyB0aGlzIGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqUnVuKiBidXR0b24gd2l0aGluIHRoZSBjaHVuayBvciBieSBwbGFjaW5nIHlvdXIgY3Vyc29yIGluc2lkZSBpdCBhbmQgcHJlc3NpbmcgKkN0cmwrU2hpZnQrRW50ZXIqLiANCg0KYGBge3J9DQpwbG90KGNhcnMpDQpgYGANCg0KPCEtLSBNdWx0aXBsZSBSZWdyZXNzaW9uIHRvIHNpbXVsYXRlIGhvdXNpbmcgcHJpY2UgYmFzZWQgb24gdXNlci1pbnB1dHRlZCBmYWN0b3JzIC0tPg0KDQo8IS0tIE91ciBzaW11bGF0aW9uIHdpbGwgaW52b2x2ZSBydW5uaW5nIG11bHRpdmFyaWF0ZSByZWdyZXNzaW9uIG92ZXIgZGlmZmVyZW50IGZhY3RvcnMgbGlrZSBidWlsZCB5ZWFyLCAtLT4NCjwhLS0gbnVtYmVyIG9mIHBhcmtpbmcgc3BhY2VzLCBhbmQgc3F1YXJlIGZvb3RhZ2Ugb24gaG91c2luZyBwcmljZXMgaW4gQXVzdGluLCBUWCBmcm9tIDIwMTggdG8gLS0+DQo8IS0tIDIwMjEuIA0KSW4gdGhlIGFwcCwgdXNlcnMgY2FuIGlucHV0IGZhY3RvcnMgYWJvdXQgYSBob3VzZSBhbmQgdGhlIHNpbXVsYXRpb24gd2lsbCByZXR1cm4gYW4gLS0+DQo8IS0tIGVzdGltYXRlZCBtYXJrZXQgcHJpY2Ugb2YgdGhlIGhvdXNlIGJhc2VkIG9uIHRoZSByZWdyZXNzaW9uLCBhZnRlciB0YWtpbmcgYW4gYXZlcmFnZSBmcm9tIC0tPg0KPCEtLSB1c2luZyBkaWZmZXJlbnQgYXNzdW1wdGlvbnMgYWJvdXQgdGhlIG1pc3NpbmcgZmFjdG9ycy92YXJpYWJsZXMuIC0tPg0KDQo8IS0tIFdlIHdpbGwgdXNlIHRoZSBkaXN0cmlidXRpb25zIG9mIHRoZSBkYXRhIGZvciBpbmRpdmlkdWFsIHZhcmlhYmxlcyB0byByYW5kb21seSBzYW1wbGUgYSB2YWx1ZSBmcm9tIC0tPg0KPCEtLSB3aGVuIGEgdXNlciBkb2VzIG5vdCBpbnB1dCBhIHZhbHVlIGZvciB0aGF0IHZhcmlhYmxlIGFuZCBhbiBhc3N1bXB0aW9uIG5lZWRzIHRvIGJlIG1hZGUuIC0tPg0KDQo8IS0tIElmIHRpbWUgYWxsb3dzLCB3ZSBjYW4gcmV2ZXJzZSB0aGUgcHJvY2VzcywgYW5kIHVzZXJzIG1heSBhbHNvIGJlIGFibGUgdG8gaW5wdXQgYSBwcmljZSBvciAtLT4NCjwhLS0gYnVkZ2V0IHJhbmdlIGludG8gdGhlIGFwcCwgYW5kIHRoZSBzaW11bGF0aW9uIHdpbGwgZ2VuZXJhdGUgYSDigJxob3VzZeKAnSBhbmQgd2hhdCBraW5kIG9mIC0tPg0KPCEtLSBjaGFyYWN0ZXJpc3RpY3MgYSBob3VzZSB3aXRoaW4gdGhhdCBwcmljZSByYW5nZSBvciBhdCB0aGF0IHByaWNlIHBvaW50IG1pZ2h0IGhhdmUuIC0tPg0KDQppbnN0YWxsLnBhY2thZ2VzKCdkcGx5cicpDQoNCjwhLS0gY3V0IG91dCBpbWFnZXMgZnJvbSBkYXRhIG9yIG90aGVyIHVud2FudGVkIHZhcmlhYmxlcyB3aXRoIHBpcGluZyB0byBjbGVhbiBkYXRhc2V0IC0tPg0KPCEtLSBmaXJzdCBjcmVhdGUgZGlzdHJpYnV0aW9uIGZvciBlYWNoIGluZGl2aWR1YWwgZmFjdG9yIGJhc2VkIG9uIGV4aXN0aW5nIGRpc3RyaWJ1dGlvbiBpbiBkYXRhIC0tPg0KPCEtLSB0aGVuIGNyZWF0ZSBmdW5jdGlvbiBmb3IgZWFjaCBmYWN0b3IgdGhhdCBnZW5lcmF0ZXMgcmFuZG9tIG51bWJlciBiYXNlZCBvbiBkaXN0cmlidXRpb24gZm9yIHRoYXQgZmFjdG9yIC0tPg0KPCEtLSB0aGVuIGNyZWF0ZSByZWdyZXNzaW9uIHdpdGggcHJpY2UgYXMgeSB2YXJpYWJsZSBhbmQgb3RoZXIgdmFyaWFibGVzIGFzIG11bHRpdmFyaWF0ZSAtLT4NCjwhLS0gY3JlYXRlIGZ1bmN0aW9uIHRoYXQgdGFrZXMgZGlmZmVyZW50IGZhY3RvcnMgYXMgcGFyYW1ldGVycyBhbmQgcmV0dXJucyBwcmljZSBiYXNlZCBvbiByZWdyZXNzaW9uIGFuZCByYW5kb21seSBnZW5lcmF0ZWQgbWlzc2luZyB2YXJpYWJsZXMgLS0+DQo8IS0tIG1ha2UgaW5kaXZpZHVhbCBmYWN0b3IgdmFyaWFibGVzIGluIGZ1bmN0aW9uIHVzZXIgaW5wdXR0YWJsZSAtLT4NCg0KDQpsaWJyYXJ5KHJlYWRyKQ0KYXVzdGluSG91c2luZ0RhdGEyIDwtIHJlYWRfY3N2KCJhdXN0aW5Ib3VzaW5nRGF0YTIuY3N2IikNCg0KPCEtLSBjbGVhbmVkIC0tPg0KbGlicmFyeShyZWFkcikNCmF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xIDwtIHJlYWRfY3N2KCJhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMS5jc3YiKQ0KDQpgYGB7cn0NCiMgbmVlZCB0byBjb252ZXJ0IFQvRiBkYXRhIHRvIDAvMSBmaXJzdA0KaW5wdXQgPC0gYXVzdGluSG91c2luZ0RhdGEyWyxjKCJ2YXJpYWJsZSIsInZhcmlhYmxlIildDQptb2RlbCA8LSBsbShsYXRlc3RQcmljZX5wcm9wZXJ0eVRheFJhdGUrZ2FyYWdlU3BhY2VzK2hhc0Nvb2xpbmcsIGRhdGEgPSBpbnB1dCkNCg0KYGBgDQoNCmBgYHtyfQ0KIyBzb21lIHJlcGxpY2FibGUgZnVuY3Rpb24gdGhhdCB0YWtlcyBpbiB2YXJpYWJsZXMgZnJvbSBtdWx0aXZhcmlhdGUgcmVncmVzc2lvbiBhYm92ZSB3aXRoIGRlZmF1bHQgdmFsdWVzIHNldCB0byByYW5kb20gZGlzdHJpYnV0aW9uIG91dHB1dCwgYW5kIHJldHVybnMgcHJpY2UNCmBgYA0KDQoNCg0KDQpBZGQgYSBuZXcgY2h1bmsgYnkgY2xpY2tpbmcgdGhlICpJbnNlcnQgQ2h1bmsqIGJ1dHRvbiBvbiB0aGUgdG9vbGJhciBvciBieSBwcmVzc2luZyAqQ3RybCtBbHQrSSouDQoNCldoZW4geW91IHNhdmUgdGhlIG5vdGVib29rLCBhbiBIVE1MIGZpbGUgY29udGFpbmluZyB0aGUgY29kZSBhbmQgb3V0cHV0IHdpbGwgYmUgc2F2ZWQgYWxvbmdzaWRlIGl0IChjbGljayB0aGUgKlByZXZpZXcqIGJ1dHRvbiBvciBwcmVzcyAqQ3RybCtTaGlmdCtLKiB0byBwcmV2aWV3IHRoZSBIVE1MIGZpbGUpLg0KDQpUaGUgcHJldmlldyBzaG93cyB5b3UgYSByZW5kZXJlZCBIVE1MIGNvcHkgb2YgdGhlIGNvbnRlbnRzIG9mIHRoZSBlZGl0b3IuIENvbnNlcXVlbnRseSwgdW5saWtlICpLbml0KiwgKlByZXZpZXcqIGRvZXMgbm90IHJ1biBhbnkgUiBjb2RlIGNodW5rcy4gSW5zdGVhZCwgdGhlIG91dHB1dCBvZiB0aGUgY2h1bmsgd2hlbiBpdCB3YXMgbGFzdCBydW4gaW4gdGhlIGVkaXRvciBpcyBkaXNwbGF5ZWQuDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpUaGlzIGlzIGFuIFtSIE1hcmtkb3duXShodHRwOi8vcm1hcmtkb3duLnJzdHVkaW8uY29tKSBOb3RlYm9vay4gV2hlbiB5b3UgZXhlY3V0ZSBjb2RlIHdpdGhpbiB0aGUgbm90ZWJvb2ssIHRoZSByZXN1bHRzIGFwcGVhciBiZW5lYXRoIHRoZSBjb2RlLiANCg0KVHJ5IGV4ZWN1dGluZyB0aGlzIGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqUnVuKiBidXR0b24gd2l0aGluIHRoZSBjaHVuayBvciBieSBwbGFjaW5nIHlvdXIgY3Vyc29yIGluc2lkZSBpdCBhbmQgcHJlc3NpbmcgKkN0cmwrU2hpZnQrRW50ZXIqLiANCg0KYGBge3J9DQpwbG90KGNhcnMpDQpgYGANCg0KPCEtLSBNdWx0aXBsZSBSZWdyZXNzaW9uIHRvIHNpbXVsYXRlIGhvdXNpbmcgcHJpY2UgYmFzZWQgb24gdXNlci1pbnB1dHRlZCBmYWN0b3JzIC0tPg0KDQo8IS0tIE91ciBzaW11bGF0aW9uIHdpbGwgaW52b2x2ZSBydW5uaW5nIG11bHRpdmFyaWF0ZSByZWdyZXNzaW9uIG92ZXIgZGlmZmVyZW50IGZhY3RvcnMgbGlrZSBidWlsZCB5ZWFyLCAtLT4NCjwhLS0gbnVtYmVyIG9mIHBhcmtpbmcgc3BhY2VzLCBhbmQgc3F1YXJlIGZvb3RhZ2Ugb24gaG91c2luZyBwcmljZXMgaW4gQXVzdGluLCBUWCBmcm9tIDIwMTggdG8gLS0+DQo8IS0tIDIwMjEuIA0KSW4gdGhlIGFwcCwgdXNlcnMgY2FuIGlucHV0IGZhY3RvcnMgYWJvdXQgYSBob3VzZSBhbmQgdGhlIHNpbXVsYXRpb24gd2lsbCByZXR1cm4gYW4gLS0+DQo8IS0tIGVzdGltYXRlZCBtYXJrZXQgcHJpY2Ugb2YgdGhlIGhvdXNlIGJhc2VkIG9uIHRoZSByZWdyZXNzaW9uLCBhZnRlciB0YWtpbmcgYW4gYXZlcmFnZSBmcm9tIC0tPg0KPCEtLSB1c2luZyBkaWZmZXJlbnQgYXNzdW1wdGlvbnMgYWJvdXQgdGhlIG1pc3NpbmcgZmFjdG9ycy92YXJpYWJsZXMuIC0tPg0KDQo8IS0tIFdlIHdpbGwgdXNlIHRoZSBkaXN0cmlidXRpb25zIG9mIHRoZSBkYXRhIGZvciBpbmRpdmlkdWFsIHZhcmlhYmxlcyB0byByYW5kb21seSBzYW1wbGUgYSB2YWx1ZSBmcm9tIC0tPg0KPCEtLSB3aGVuIGEgdXNlciBkb2VzIG5vdCBpbnB1dCBhIHZhbHVlIGZvciB0aGF0IHZhcmlhYmxlIGFuZCBhbiBhc3N1bXB0aW9uIG5lZWRzIHRvIGJlIG1hZGUuIC0tPg0KDQo8IS0tIElmIHRpbWUgYWxsb3dzLCB3ZSBjYW4gcmV2ZXJzZSB0aGUgcHJvY2VzcywgYW5kIHVzZXJzIG1heSBhbHNvIGJlIGFibGUgdG8gaW5wdXQgYSBwcmljZSBvciAtLT4NCjwhLS0gYnVkZ2V0IHJhbmdlIGludG8gdGhlIGFwcCwgYW5kIHRoZSBzaW11bGF0aW9uIHdpbGwgZ2VuZXJhdGUgYSDigJxob3VzZeKAnSBhbmQgd2hhdCBraW5kIG9mIC0tPg0KPCEtLSBjaGFyYWN0ZXJpc3RpY3MgYSBob3VzZSB3aXRoaW4gdGhhdCBwcmljZSByYW5nZSBvciBhdCB0aGF0IHByaWNlIHBvaW50IG1pZ2h0IGhhdmUuIC0tPg0KDQppbnN0YWxsLnBhY2thZ2VzKCdkcGx5cicpDQoNCjwhLS0gY3V0IG91dCBpbWFnZXMgZnJvbSBkYXRhIG9yIG90aGVyIHVud2FudGVkIHZhcmlhYmxlcyB3aXRoIHBpcGluZyB0byBjbGVhbiBkYXRhc2V0IC0tPg0KPCEtLSBmaXJzdCBjcmVhdGUgZGlzdHJpYnV0aW9uIGZvciBlYWNoIGluZGl2aWR1YWwgZmFjdG9yIGJhc2VkIG9uIGV4aXN0aW5nIGRpc3RyaWJ1dGlvbiBpbiBkYXRhIC0tPg0KPCEtLSB0aGVuIGNyZWF0ZSBmdW5jdGlvbiBmb3IgZWFjaCBmYWN0b3IgdGhhdCBnZW5lcmF0ZXMgcmFuZG9tIG51bWJlciBiYXNlZCBvbiBkaXN0cmlidXRpb24gZm9yIHRoYXQgZmFjdG9yIC0tPg0KPCEtLSB0aGVuIGNyZWF0ZSByZWdyZXNzaW9uIHdpdGggcHJpY2UgYXMgeSB2YXJpYWJsZSBhbmQgb3RoZXIgdmFyaWFibGVzIGFzIG11bHRpdmFyaWF0ZSAtLT4NCjwhLS0gY3JlYXRlIGZ1bmN0aW9uIHRoYXQgdGFrZXMgZGlmZmVyZW50IGZhY3RvcnMgYXMgcGFyYW1ldGVycyBhbmQgcmV0dXJucyBwcmljZSBiYXNlZCBvbiByZWdyZXNzaW9uIGFuZCByYW5kb21seSBnZW5lcmF0ZWQgbWlzc2luZyB2YXJpYWJsZXMgLS0+DQo8IS0tIG1ha2UgaW5kaXZpZHVhbCBmYWN0b3IgdmFyaWFibGVzIGluIGZ1bmN0aW9uIHVzZXIgaW5wdXR0YWJsZSAtLT4NCg0KDQo8IS0tIHJlYWRpbmcgaW4gZGF0YSAtLT4NCmxpYnJhcnkocmVhZHIpDQphdXN0aW5Ib3VzaW5nRGF0YTIgPC0gcmVhZF9jc3YoImF1c3RpbkhvdXNpbmdEYXRhMi5jc3YiKQ0KDQo8IS0tIGNsZWFuZWQgLS0+DQpsaWJyYXJ5KHJlYWRyKQ0KYXVzdGluSG91c2luZ0RhdGFDbGVhbjEgPC0gcmVhZF9jc3YoImF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xLmNzdiIpDQpzdHIoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEpDQoNCjwhLS0gY291bGQgdHVybiBjaXR5L3ppcGNvZGUgY29sdW1uIGludG8gbWFueSBkdW1teSB2YXJpYWJsZXMgYnV0IEkgZG9uJ3QgZmVlbCBsaWtlIGl0IHNvIEknbSBvbmx5IGdvaW5nIHRvIHNraXAgZm9yIG5vdyAtLT4NCg0KDQoNCmBgYHtyfQ0KIyBuZWVkIHRvIGNvbnZlcnQgVC9GIGRhdGEgdG8gMC8xIGZpcnN0DQojaW5pdGlhbCByZWdyZXNzaW9uDQppbnB1dCA8LSBhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMVssYygibGF0ZXN0UHJpY2UiLCJwcm9wZXJ0eVRheFJhdGUiLCAiZ2FyYWdlU3BhY2VzIiwgImhhc0Nvb2xpbmciLCAiaGFzR2FyYWdlIiwgImhhc0Fzc29jaWF0aW9uIiwgImhhc0hlYXRpbmciLCAiaGFzU3BhIiwgImhhc1ZpZXciLCAicGFya2luZ1NwYWNlcyIsICJ5ZWFyQnVpbHQiLCAibnVtT2ZQaG90b3MiLCAibnVtT2ZBY2Nlc3NpYmlsaXR5RmVhdHVyZXMiLCAibnVtT2ZBcHBsaWFuY2VzIiwgIm51bU9mUGFya2luZ0ZlYXR1cmVzIiwgIm51bU9mUGF0aW9BbmRQb3JjaEZlYXR1cmVzIiwgIm51bU9mU2VjdXJpdHlGZWF0dXJlcyIsICJudW1PZldhdGVyZnJvbnRGZWF0dXJlcyIsICJudW1PZldpbmRvd0ZlYXR1cmVzIiwgIm51bU9mQ29tbXVuaXR5RmVhdHVyZXMiLCAibG90U2l6ZVNxRnQiLCAibGl2aW5nQXJlYVNxRnQiLCAibnVtT2ZQcmltYXJ5U2Nob29scyIsICJudW1PZkVsZW1lbnRhcnlTY2hvb2xzIiwgIm51bU9mTWlkZGxlU2Nob29scyIsICJudW1PZkhpZ2hTY2hvb2xzIiwgImF2Z1NjaG9vbERpc3RhbmNlIiwgImF2Z1NjaG9vbFJhdGluZyIsICJhdmdTY2hvb2xTaXplIiwgIk1lZGlhblN0dWRlbnRzUGVyVGVhY2hlciIsICJudW1PZkJhdGhyb29tcyIsICJudW1PZkJlZHJvb21zIiwgIm51bU9mU3RvcmllcyIpXQ0KbW9kZWwgPC0gbG0obGF0ZXN0UHJpY2V+cHJvcGVydHlUYXhSYXRlK2dhcmFnZVNwYWNlcytoYXNDb29saW5nK2hhc0dhcmFnZStoYXNBc3NvY2lhdGlvbitoYXNIZWF0aW5nK2hhc1NwYStoYXNWaWV3K3BhcmtpbmdTcGFjZXMreWVhckJ1aWx0K251bU9mUGhvdG9zK251bU9mQWNjZXNzaWJpbGl0eUZlYXR1cmVzK251bU9mQXBwbGlhbmNlcytudW1PZlBhcmtpbmdGZWF0dXJlcytudW1PZlBhdGlvQW5kUG9yY2hGZWF0dXJlcytudW1PZlNlY3VyaXR5RmVhdHVyZXMrbnVtT2ZXYXRlcmZyb250RmVhdHVyZXMrbnVtT2ZXaW5kb3dGZWF0dXJlcytudW1PZkNvbW11bml0eUZlYXR1cmVzK2xvdFNpemVTcUZ0K2xpdmluZ0FyZWFTcUZ0K251bU9mUHJpbWFyeVNjaG9vbHMrbnVtT2ZFbGVtZW50YXJ5U2Nob29scytudW1PZk1pZGRsZVNjaG9vbHMrbnVtT2ZIaWdoU2Nob29scythdmdTY2hvb2xEaXN0YW5jZSthdmdTY2hvb2xSYXRpbmcrYXZnU2Nob29sU2l6ZStNZWRpYW5TdHVkZW50c1BlclRlYWNoZXIrbnVtT2ZCYXRocm9vbXMrbnVtT2ZCZWRyb29tcytudW1PZlN0b3JpZXMsIGRhdGEgPSBpbnB1dCkNCiNwcmludGluZyB0aGUgbW9kZWwgc2hvd3MgYWxsIHRoZSBjb2VmZmljaWVudHMuIHNvbWUgb2YgdGhlIHNpZ25zIGRvbid0IHJlYWxseSBtYWtlIHNlbnNlIHRiaCAoZXguOiB3aHkgZG9lcyBoYXZpbmcgbW9yZSBiZWRyb29tcyBkZWNyZWFzZSB0aGUgcHJpY2U/PykNCnByaW50KG1vZGVsKQ0KDQpgYGANCg0KPCEtLSBzb21lIGZ1bmN0aW9uIHRoYXQgdGFrZXMgaW4gYWxsIG51bWVyaWMgY29sdW1ucyBmcm9tIGRhdGEgYW5kIGdldHMgb3ZlcmFsbCBjb2VmZmljaWVudHMgb24gZWFjaCB2YXJpYWJsZSBpbiBhIG11bHRpdmFyaWF0ZSByZWdyZXNzaW9uIG9uIHByaWNlIC0tPg0KDQoNCmBgYHtyfQ0KI2dlbmVyYXRlcyByYW5kb20gcHJvcGVydHkgdGF4IHJhdGUNCnByb3BlcnR5VGF4UmF0ZUdlbiA8LSBmdW5jdGlvbigpew0KICByYXRlcyA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkcHJvcGVydHlUYXhSYXRlLCA1LCByZXBsYWNlPVRSVUUpDQogIHJldHVybihtZWFuKHJhdGVzKSkNCn0NCmBgYA0KDQpgYGB7cn0NCiNnZW5lcmF0ZXMgcmFuZG9tIG51bWJlciBvZiBnYXJhZ2Ugc3BhY2VzDQpnYXJhZ2VTcGFjZXNHZW4gPC0gZnVuY3Rpb24oKXsNCiAgc3BhY2VzIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRnYXJhZ2VTcGFjZXMsIDUsIHJlcGxhY2U9VFJVRSkNCiAgcmV0dXJuKG1lYW4oc3BhY2VzKSkNCn0NCmBgYA0KDQpgYGB7cn0NCiNnZW5lcmF0ZXMgcmFuZG9tIGNvb2xpbmcgYm9vbGVhbg0KaGFzQ29vbGluZ0dlbiA8LSBmdW5jdGlvbigpew0KICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRoYXNDb29saW5nLCAxLCByZXBsYWNlPVRSVUUpDQogIHJldHVybihzYW1wKQ0KfQ0KYGBgDQoNCmBgYHtyfQ0KI2dlbmVyYXRlcyByYW5kb20gZ2FyYWdlIGJvb2xlYW4NCmhhc0dhcmFnZUdlbiA8LSBmdW5jdGlvbigpew0KICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRoYXNHYXJhZ2UsIDEsIHJlcGxhY2U9VFJVRSkNCiAgcmV0dXJuKHNhbXApDQp9DQpgYGANCg0KYGBge3J9DQojZ2VuZXJhdGVzIHJhbmRvbSBIT0EgYm9vbGVhbg0KaGFzQXNzb2NpYXRpb25HZW4gPC0gZnVuY3Rpb24oKXsNCiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkaGFzQXNzb2NpYXRpb24sIDEsIHJlcGxhY2U9VFJVRSkNCiAgcmV0dXJuKHNhbXApDQp9DQpgYGANCg0KYGBge3J9DQojZ2VuZXJhdGVzIHJhbmRvbSBoZWF0aW5nIGJvb2xlYW4NCmhhc0hlYXRpbmdHZW4gPC0gZnVuY3Rpb24oKXsNCiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkaGFzSGVhdGluZywgMSwgcmVwbGFjZT1UUlVFKQ0KICByZXR1cm4oc2FtcCkNCn0NCmBgYA0KDQpgYGB7cn0NCiNnZW5lcmF0ZXMgcmFuZG9tIHNwYSBib29sZWFuDQpoYXNTcGFHZW4gPC0gZnVuY3Rpb24oKXsNCiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkaGFzU3BhLCAxLCByZXBsYWNlPVRSVUUpDQogIHJldHVybihzYW1wKQ0KfQ0KYGBgDQoNCmBgYHtyfQ0KI2dlbmVyYXRlcyByYW5kb20gdmlldyBib29sZWFuDQpoYXNWaWV3R2VuIDwtIGZ1bmN0aW9uKCl7DQogIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJGhhc1ZpZXcsIDEsIHJlcGxhY2U9VFJVRSkNCiAgcmV0dXJuKHNhbXApDQp9DQpgYGANCg0KYGBge3J9DQojZ2VuZXJhdGVzIHJhbmRvbSBudW1iZXIgb2YgcGFya2luZyBzcGFjZXMNCnBhcmtpbmdTcGFjZXNHZW4gPC0gZnVuY3Rpb24oKXsNCiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkcGFya2luZ1NwYWNlcywgNSwgcmVwbGFjZT1UUlVFKQ0KICByZXR1cm4obWVhbihzYW1wKSkNCn0NCmBgYA0KDQpgYGB7cn0NCiNnZW5lcmF0ZXMgcmFuZG9tIHllYXIgYnVpbHQNCnllYXJCdWlsdEdlbiA8LSBmdW5jdGlvbigpew0KICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSR5ZWFyQnVpbHRHZW4sIDEsIHJlcGxhY2U9VFJVRSkNCiAgcmV0dXJuKHNhbXApDQp9DQpgYGANCg0KYGBge3J9DQojZ2VuZXJhdGVzIHJhbmRvbSBudW1iZXIgb2YgcHJpY2UgY2hhbmdlcyBvbiBsaXN0aW5nDQpwcmljZUNoYW5nZXNHZW4gPC0gZnVuY3Rpb24oKXsNCiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkbnVtUHJpY2VDaGFuZ2VzLCA1LCByZXBsYWNlPVRSVUUpDQogIHJldHVybihtZWFuKHNhbXApKQ0KfQ0KYGBgDQoNCmBgYHtyfQ0KI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIHBob3RvcyBvbiBsaXN0aW5nDQpudW1QaG90b3NHZW4gPC0gZnVuY3Rpb24oKXsNCiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkbnVtT2ZQaG90b3MsIDUsIHJlcGxhY2U9VFJVRSkNCiAgcmV0dXJuKG1lYW4oc2FtcCkpDQp9DQpgYGANCg0KYGBge3J9DQojZ2VuZXJhdGVzIHJhbmRvbSBudW1iZXIgb2YgYWNjZXNzaWJpbGl0eSBmZWF0dXJlcw0KbnVtQWNjZXNzR2VuIDwtIGZ1bmN0aW9uKCl7DQogIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJG51bU9mQWNjZXNzaWJpbGl0eUZlYXR1cmVzLCAxLCByZXBsYWNlPVRSVUUpDQogIHJldHVybihzYW1wKQ0KfQ0KYGBgDQoNCmBgYHtyfQ0KI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIGFwcGxpYW5jZXMNCm51bUFwcEdlbiA8LSBmdW5jdGlvbigpew0KICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRudW1PZkFwcGxpYW5jZXMsIDEsIHJlcGxhY2U9VFJVRSkNCiAgcmV0dXJuKHNhbXApDQp9DQpgYGANCg0KYGBge3J9DQojZ2VuZXJhdGVzIHJhbmRvbSBudW1iZXIgb2YgcGF0aW8vcG9yY2ggZmVhdHVyZXMNCm51bVBhdFBvcmNoR2VuIDwtIGZ1bmN0aW9uKCl7DQogIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJG51bU9mUGF0aW9BbmRQb3JjaEZlYXR1cmVzLCAxLCByZXBsYWNlPVRSVUUpDQogIHJldHVybihzYW1wKQ0KfQ0KYGBgDQoNCmBgYHtyfQ0KI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIHNlY3VyaXR5IGZlYXR1cmVzDQpudW1TZWN1cml0eUdlbiA8LSBmdW5jdGlvbigpew0KICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRudW1PZlNlY3VyaXR5RmVhdHVyZXMsIDEsIHJlcGxhY2U9VFJVRSkNCiAgcmV0dXJuKHNhbXApDQp9DQpgYGANCg0KYGBge3J9DQojZ2VuZXJhdGVzIHJhbmRvbSBudW1iZXIgb2Ygd2F0ZXJmcm9udCBmZWF0dXJlcw0KbnVtV2F0ZXJmcm9udEdlbiA8LSBmdW5jdGlvbigpew0KICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRudW1PZldhdGVyZnJvbnRGZWF0dXJlcywgMSwgcmVwbGFjZT1UUlVFKQ0KICByZXR1cm4oc2FtcCkNCn0NCmBgYA0KDQpgYGB7cn0NCiNnZW5lcmF0ZXMgcmFuZG9tIG51bWJlciBvZiB3aW5kb3cgZmVhdHVyZXMNCm51bVdpbmRvd0ZlYXR1cmVzR2VuIDwtIGZ1bmN0aW9uKCl7DQogIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJG51bU9mV2luZG93RmVhdHVyZXMsIDEsIHJlcGxhY2U9VFJVRSkNCiAgcmV0dXJuKHNhbXApDQp9DQpgYGANCg0KYGBge3J9DQojZ2VuZXJhdGVzIHJhbmRvbSBudW1iZXIgb2YgcGF0aW8vcG9yY2ggZmVhdHVyZXMNCm51bUNvbW1HZW4gPC0gZnVuY3Rpb24oKXsNCiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkbnVtT2ZDb21tdW5pdHlGZWF0dXJlcywgMSwgcmVwbGFjZT1UUlVFKQ0KICByZXR1cm4oc2FtcCkNCn0NCmBgYA0KDQpgYGB7cn0NCiNnZW5lcmF0ZXMgcmFuZG9tIGxvdCBzaXplIGluIHNxIGZ0DQpTcUZ0R2VuIDwtIGZ1bmN0aW9uKCl7DQogIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJGxvdFNpemVTcUZ0LCA1LCByZXBsYWNlPVRSVUUpDQogIHJldHVybihtZWFuKHNhbXApKQ0KfQ0KYGBgDQoNCmBgYHtyfQ0KI2dlbmVyYXRlcyByYW5kb20gYXJlYSBvZiBsaXZpbmcgYXJlYSBpbiBzcSBmdA0KbGl2U3FGdEdlbiA8LSBmdW5jdGlvbigpew0KICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRsaXZpbmdBcmVhU3FGdCwgNSwgcmVwbGFjZT1UUlVFKQ0KICByZXR1cm4obWVhbihzYW1wKSkNCn0NCmBgYA0KDQpgYGB7cn0NCiNnZW5lcmF0ZXMgcmFuZG9tIG51bWJlciBvZiBwcmltYXJ5IHNjaG9vbHMgaW4gYXJlYQ0KbnVtUHJpbWFyeUdlbiA8LSBmdW5jdGlvbigpew0KICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRudW1PZlByaW1hcnlTY2hvb2xzLCAxLCByZXBsYWNlPVRSVUUpDQogIHJldHVybihzYW1wKQ0KfQ0KYGBgDQoNCmBgYHtyfQ0KI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIGVsZW1lbnRhcnkgc2Nob29scyBpbiBhcmVhDQpudW1FbGVtZW50YXJ5R2VuIDwtIGZ1bmN0aW9uKCl7DQogIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJG51bU9mRWxlbWVudGFyeVNjaG9vbHMsIDEsIHJlcGxhY2U9VFJVRSkNCiAgcmV0dXJuKHNhbXApDQp9DQpgYGANCg0KYGBge3J9DQojZ2VuZXJhdGVzIHJhbmRvbSBudW1iZXIgb2YgbWlkZGxlIHNjaG9vbHMgaW4gYXJlYQ0KbnVtTWlkZGxlR2VuIDwtIGZ1bmN0aW9uKCl7DQogIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJG51bU9mTWlkZGxlU2Nob29scywgMSwgcmVwbGFjZT1UUlVFKQ0KICByZXR1cm4oc2FtcCkNCn0NCmBgYA0KDQpgYGB7cn0NCiNnZW5lcmF0ZXMgcmFuZG9tIG51bWJlciBvZiBoaWdoIHNjaG9vbHMgaW4gYXJlYQ0KbnVtSGlnaEdlbiA8LSBmdW5jdGlvbigpew0KICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRudW1PZkhpZ2hTY2hvb2xzLCAxLCByZXBsYWNlPVRSVUUpDQogIHJldHVybihzYW1wKQ0KfQ0KYGBgDQoNCmBgYHtyfQ0KI2dlbmVyYXRlcyByYW5kb20gZGlzdGFuY2UgdG8gbmVhcmVzdCBzY2hvb2wNCm51bVNjaG9vbERpc3RHZW4gPC0gZnVuY3Rpb24oKXsNCiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkYXZnU2Nob29sRGlzdGFuY2UsIDUsIHJlcGxhY2U9VFJVRSkNCiAgcmV0dXJuKG1lYW4oc2FtcCkpDQp9DQpgYGANCg0KYGBge3J9DQojZ2VuZXJhdGVzIHJhbmRvbSBhdmVyYWdlIGFyZWEgc2Nob29sIHJhdGluZw0Kc2Nob29sUmF0aW5nR2VuIDwtIGZ1bmN0aW9uKCl7DQogIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJGF2Z1NjaG9vbFJhdGluZywgNSwgcmVwbGFjZT1UUlVFKQ0KICByZXR1cm4obWVhbihzYW1wKSkNCn0NCmBgYA0KDQpgYGB7cn0NCiNnZW5lcmF0ZXMgcmFuZG9tIG51bWJlciBvZiBzdHVkZW50cyBhdCBuZWFyZXN0IHNjaG9vbA0Kc2Nob29sU2l6ZUdlbiA8LSBmdW5jdGlvbigpew0KICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRhdmdTY2hvb2xTaXplLCA1LCByZXBsYWNlPVRSVUUpDQogIHJldHVybihtZWFuKHNhbXApKQ0KfQ0KYGBgDQoNCmBgYHtyfQ0KI2dlbmVyYXRlcyByYW5kb20gc3R1ZGVudC10ZWFjaGVyIHJhdGlvDQpzdHVUZWFjaFJhdGlvR2VuIDwtIGZ1bmN0aW9uKCl7DQogIHNhbXAgPC0gc2FtcGxlKGF1c3RpbkhvdXNpbmdEYXRhQ2xlYW4xJE1lZGlhblN0dWRlbnRzUGVyVGVhY2hlciwgNSwgcmVwbGFjZT1UUlVFKQ0KICByZXR1cm4obWVhbihzYW1wKSkNCn0NCmBgYA0KDQpgYGB7cn0NCiNnZW5lcmF0ZXMgcmFuZG9tIG51bWJlciBvZiBiYXRocm9vbXMNCm51bUJhdGhHZW4gPC0gZnVuY3Rpb24oKXsNCiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkbnVtT2ZCYXRocm9vbXMsIDEsIHJlcGxhY2U9VFJVRSkNCiAgcmV0dXJuKHNhbXApDQp9DQpgYGANCg0KYGBge3J9DQojZ2VuZXJhdGVzIHJhbmRvbSBudW1iZXIgb2YgYmVkcm9vbXMNCm51bUJlZEdlbiA8LSBmdW5jdGlvbigpew0KICBzYW1wIDwtIHNhbXBsZShhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSRudW1PZkJlZHJvb21zLCAxLCByZXBsYWNlPVRSVUUpDQogIHJldHVybihzYW1wKQ0KfQ0KYGBgDQoNCmBgYHtyfQ0KI2dlbmVyYXRlcyByYW5kb20gbnVtYmVyIG9mIHN0b3JpZXMNCm51bVN0b3JpZXNHZW4gPC0gZnVuY3Rpb24oKXsNCiAgc2FtcCA8LSBzYW1wbGUoYXVzdGluSG91c2luZ0RhdGFDbGVhbjEkbnVtT2ZTdG9yaWVzLCAxLCByZXBsYWNlPVRSVUUpDQogIHJldHVybihzYW1wKQ0KfQ0KYGBgDQoNCg0KDQo8IS0tIGR1bW15IHZhcmlhYmxlcyAtLT4NCmluc3RhbGwucGFja2FnZXMoJ2Zhc3REdW1taWVzJykNCmxpYnJhcnkoJ2Zhc3REdW1taWVzJykNCg0KYXVzdGluSG91c2luZ0RhdGFDbGVhbjEgPC0gZHVtbXlfY29scyhhdXN0aW5Ib3VzaW5nRGF0YUNsZWFuMSwgc2VsZWN0X2NvbHVtbnMgPSBjKCdjaXR5JywgJ3ppcGNvZGUnLCAnaG9tZVR5cGUnLCAnbGF0ZXN0X3NhbGVtb250aCcsICdsYXRlc3Rfc2FsZXllYXInKSkNCjwhLS0gcmVtZW1iZXIgdG8gaGFyZCBjb2RlIGluIHRoZXNlIGR1bW15IHZhcmlhYmxlcyBpbiB0aGUgbWFpbiByZWdyZXNzaW9uIG1vZGVsLCBzbyB0aGF0IGNpdHkvemlwY29kZSBhdCBsZWFzdCBkbyBub3QgaGF2ZSByYW5kb21pemVkIGFzc3VtcHRpb25zLiBjYW4gcmFuZG9tbHkgYXNzaWduIGhvbWV0eXBlIGFuZCBtb250aC95ZWFyIHRob3VnaCAtLT4NCg0KDQoNCmBgYHtyfQ0KIyBzb21lIHJlcGxpY2FibGUgZnVuY3Rpb24gdGhhdCB0YWtlcyBpbiBjb2VmZmljaWVudHMvdmFyaWFibGVzIGZyb20gbXVsdGl2YXJpYXRlIHJlZ3Jlc3Npb24gYWJvdmUgd2l0aCBkZWZhdWx0IHZhbHVlcyBzZXQgdG8gcmFuZG9tIGRpc3RyaWJ1dGlvbiBvdXRwdXQsIGFuZCByZXR1cm5zIHByaWNlDQoNCnByaWNlRmluZGVyIDwtIGZ1bmN0aW9uKHByb3BUUiA9IHJhbmRvbWJ5ZGVmYXVsdHVubGVzc3VzZXJpbnB1dHNhbnVtYmVyKXsNCiAgDQp9DQpgYGANCg0KDQoNCg0KQWRkIGEgbmV3IGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqSW5zZXJ0IENodW5rKiBidXR0b24gb24gdGhlIHRvb2xiYXIgb3IgYnkgcHJlc3NpbmcgKkN0cmwrQWx0K0kqLg0KDQpXaGVuIHlvdSBzYXZlIHRoZSBub3RlYm9vaywgYW4gSFRNTCBmaWxlIGNvbnRhaW5pbmcgdGhlIGNvZGUgYW5kIG91dHB1dCB3aWxsIGJlIHNhdmVkIGFsb25nc2lkZSBpdCAoY2xpY2sgdGhlICpQcmV2aWV3KiBidXR0b24gb3IgcHJlc3MgKkN0cmwrU2hpZnQrSyogdG8gcHJldmlldyB0aGUgSFRNTCBmaWxlKS4NCg0KVGhlIHByZXZpZXcgc2hvd3MgeW91IGEgcmVuZGVyZWQgSFRNTCBjb3B5IG9mIHRoZSBjb250ZW50cyBvZiB0aGUgZWRpdG9yLiBDb25zZXF1ZW50bHksIHVubGlrZSAqS25pdCosICpQcmV2aWV3KiBkb2VzIG5vdCBydW4gYW55IFIgY29kZSBjaHVua3MuIEluc3RlYWQsIHRoZSBvdXRwdXQgb2YgdGhlIGNodW5rIHdoZW4gaXQgd2FzIGxhc3QgcnVuIGluIHRoZSBlZGl0b3IgaXMgZGlzcGxheWVkLg0K</div>
 
 
 
