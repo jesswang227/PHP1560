@@ -27,6 +27,8 @@ In the app, users can input factors about a house and the simulation will return
 <!-- budget range into the app, and the simulation will generate a “house” and what kind of -->
 <!-- characteristics a house within that price range or at that price point might have. -->
 
+options(scipen=999)
+
 install.packages('dplyr')
 
 <!-- cut out images from data or other unwanted variables with piping to clean dataset -->
@@ -35,6 +37,11 @@ install.packages('dplyr')
 <!-- then create regression with price as y variable and other variables as multivariate -->
 <!-- create function that takes different factors as parameters and returns price based on regression and randomly generated missing variables -->
 <!-- make individual factor variables in function user inputtable -->
+
+<!-- import dataset -->
+library(readr)
+austinHousingDataClean1 <- read_csv("GitHub/PHP1560/austinHousingDataClean1.csv")
+View(austinHousingDataClean1)
 
 
 <!-- reading in data -->
@@ -176,6 +183,14 @@ numAppGen <- function(){
 ```
 
 ```{r}
+#generates random number of parking features
+numParkGen <- function(){
+  samp <- sample(austinHousingDataClean1$numOfParkingFeatures, 1, replace=TRUE)
+  return(samp)
+```
+
+
+```{r}
 #generates random number of patio/porch features
 numPatPorchGen <- function(){
   samp <- sample(austinHousingDataClean1$numOfPatioAndPorchFeatures, 1, replace=TRUE)
@@ -208,7 +223,7 @@ numWindowFeaturesGen <- function(){
 ```
 
 ```{r}
-#generates random number of patio/porch features
+#generates random number of community features
 numCommGen <- function(){
   samp <- sample(austinHousingDataClean1$numOfCommunityFeatures, 1, replace=TRUE)
   return(samp)
@@ -328,16 +343,71 @@ library('fastDummies')
 austinHousingDataClean1 <- dummy_cols(austinHousingDataClean1, select_columns = c('city', 'zipcode', 'homeType', 'latest_salemonth', 'latest_saleyear'))
 <!-- remember to hard code in these dummy variables in the main regression model, so that city/zipcode at least do not have randomized assumptions. can randomly assign hometype and month/year though -->
 
+<!-- i have it take the user input variables as parameters -->
+<!-- than inside I declare a variable corresponding to each main variable -->
+<!-- like city -->
+<!-- and then for the non annoying variables i just set them to take the default value of the return of its RNG distribution function or if there's a user input then it takes that  -->
+<!-- and for the annoying variables I do an if statement so if there's a user input it takes that and if not it just defaults to 0 (and also updates the corresponding dummy variable)  -->
+<!-- and then I call on the regression function -->
+<!-- and then for the regression function I take the redeclared variables above as parameters -->
+
+```{r}
+propTRHolder <- propTRHolderF(correspondinguserinput)
+
+propTRHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (propertyTaxRateGen())
+  }
+}
+```
+
+```{r}
+gSpacesHolder <- propTRHolderF(correspondinguserinput)
+
+gSpacesHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (garageSpacesGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (hasCoolingGen())
+  }
+}
+```
+
+
 
 
 ```{r}
 # some replicable function that takes in coefficients/variables from multivariate regression above with default values set to random distribution output, and returns price
 
-priceFinder <- function(propTR = randombydefaultunlessuserinputsanumber){
-  
+priceFinder <- function(propTR = propTRHolder, gSpaces = gSpacesHolder, hCooling = hCoolingHolder, hGarage = hGarageHolder, hAssoc = hAssocHolder, hHeating = hHeatingHolder, hSpa = hSpaHolder, hView = hViewHolder, pSpaces = pSpacesHolder, yBuilt = yBuiltHolder, nPhotos = nPhotosHolder, nAccess = nAccessHolder, nApp = nAppHolder, nPark = nParkHolder, nPat = nPatHolder, nSec = nSecHolder, nWater = nWaterHolder, nWindow = nWindowHolder, nComm = nCommHolder, sqFeet = sqFeetHolder, livSqFeet = livSqFeetHolder, nPrimary = nPrimaryHolder, nElementary = nElementaryHolder, nMiddle = nMiddleHolder, nHigh = nHighHolder, nSchoolDist = nSchoolDistHolder, schoolRat = schoolRatHolder, schSize = schSizeHolder, stRatio = stRatioHolder, nBath = nBathHolder, nBed = nBedHolder, nStories = nStoriesHolder){
+  simprice <- -1015868.0037958*propTR + 73706.5379144*gSpaces - 125057.2573133*hCooling -68388.0019782*hGarage - 150959.4909390*hAssoc -12573.6828740*hHeating + 75565.2831228*hSpa + 31737.201765*hView - 64615.0962348*pSpaces -976.7410605*yBuilt + 658.6923030*nPhotos + 12889.6133218*nAccess -2986.3553716*nApp + 43091.4178786*nPark + 13788.8077623*nPat + 2723.7220041*nSec + 640006.4840522*nWater -3377.8766265*nWindow -54456.4761282*nComm + 0.0004611*sqFeet + 87.1140864*livSqFeet + 162277.4549212*nPrimary + 210417.3458792*nElementary - 41107.4097195*nMiddle -92208.9544069*nHigh - 4590.8758825*nSchoolDist + 52539.0235992*schoolRat - 98.0439180*schSize - 15657.7305688*stRatio + 201067.6749276*nBath - 44520.3992813*nBed - 76892.1634096*nStories + 4177001.7951976
+  return(simprice)
 }
 ```
 
+
+```{r}
+finalsimPriceFinder <- function(userinputvariablelist){
+  return(mean(rep(5,priceFinder(userinputvariablelist))))
+}
+```
 
 
 
