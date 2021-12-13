@@ -390,6 +390,31 @@ hCoolingHolderF <- function(userinput){
 }
 ```
 
+```{r}
+hGarageHolder <- hGarageHolderF(correspondinguserinput)
+
+hGarageHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (hasGarageGen())
+  }
+}
+```
+
+```{r}
+hAssocHolder <- hAssocHolderF(correspondinguserinput)
+
+hAssocHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (hasAssociationGen())
+  }
+}
+```
 
 
 
