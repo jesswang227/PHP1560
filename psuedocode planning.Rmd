@@ -412,7 +412,6 @@ hGarageHolder <- hGarageHolderF(correspondinguserinput)
 ```
 
 ```{r}
-hAssocHolder <- hAssocHolderF(correspondinguserinput)
 
 hAssocHolderF <- function(userinput){
   if(userinput != null){
@@ -422,10 +421,12 @@ hAssocHolderF <- function(userinput){
     return (hasAssociationGen())
   }
 }
+
+hAssocHolder <- hAssocHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-hHeatingHolder <- hHeatingHolderF(correspondinguserinput)
 
 hHeatingHolderF <- function(userinput){
   if(userinput != null){
@@ -435,10 +436,12 @@ hHeatingHolderF <- function(userinput){
     return (hasHeatingGen())
   }
 }
+
+hHeatingHolder <- hHeatingHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-hSpaHolder <- hSpaHolderF(correspondinguserinput)
 
 hSpaHolderF <- function(userinput){
   if(userinput != null){
@@ -448,10 +451,12 @@ hSpaHolderF <- function(userinput){
     return (hasSpaGen())
   }
 }
+
+hSpaHolder <- hSpaHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-hViewHolder <- hViewHolderF(correspondinguserinput)
 
 hViewHolderF <- function(userinput){
   if(userinput != null){
@@ -461,10 +466,12 @@ hViewHolderF <- function(userinput){
     return (hasViewGen())
   }
 }
+
+hViewHolder <- hViewHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-pSpacesHolder <- pSpacesHolderF(correspondinguserinput)
 
 pSpacesHolderF <- function(userinput){
   if(userinput != null){
@@ -474,10 +481,12 @@ pSpacesHolderF <- function(userinput){
     return (parkingSpacesGen())
   }
 }
+
+pSpacesHolder <- pSpacesHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-yBuiltHolder <- yBuiltHolderF(correspondinguserinput)
 
 yBuiltHolderF <- function(userinput){
   if(userinput != null){
@@ -487,12 +496,14 @@ yBuiltHolderF <- function(userinput){
     return (yearBuiltGen())
   }
 }
+
+yBuiltHolder <- yBuiltHolderF(correspondinguserinput)
+
 ```
 
 ```
 
 ```{r}
-nPhotosHolder <- nPhotosHolderF(correspondinguserinput)
 
 nPhotosHolderF <- function(userinput){
   if(userinput != null){
@@ -502,10 +513,15 @@ nPhotosHolderF <- function(userinput){
     return (numPhotosGen())
   }
 }
+
+nPhotosHolder <- nPhotosHolderF(correspondinguserinput)
+
+```
+
+
 ```
 
 ```{r}
-nAccessHolder <- nAccessHolderF(correspondinguserinput)
 
 nAccessHolderF <- function(userinput){
   if(userinput != null){
@@ -515,10 +531,12 @@ nAccessHolderF <- function(userinput){
     return (numAccessGen())
   }
 }
+
+nAccessHolder <- nAccessHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-nAppHolder <- nAppHolderF(correspondinguserinput)
 
 nAppHolderF <- function(userinput){
   if(userinput != null){
@@ -528,10 +546,12 @@ nAppHolderF <- function(userinput){
     return (numAppGen())
   }
 }
+
+nAppHolder <- nAppHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-nParkHolder <- nParkHolderF(correspondinguserinput)
 
 nParkHolderF <- function(userinput){
   if(userinput != null){
@@ -541,10 +561,12 @@ nParkHolderF <- function(userinput){
     return (numParkGen())
   }
 }
+
+nParkHolder <- nParkHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-nPatHolder <- nPatHolderF(correspondinguserinput)
 
 nPatHolderF <- function(userinput){
   if(userinput != null){
@@ -554,10 +576,12 @@ nPatHolderF <- function(userinput){
     return (numPatPorchGen())
   }
 }
+
+nPatHolder <- nPatHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-nSecHolder <- nSecHolderF(correspondinguserinput)
 
 nSecHolderF <- function(userinput){
   if(userinput != null){
@@ -567,10 +591,12 @@ nSecHolderF <- function(userinput){
     return (numSecurityGen())
   }
 }
+
+nSecHolder <- nSecHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-nWaterHolder <- nWaterHolderF(correspondinguserinput)
 
 nWaterHolderF <- function(userinput){
   if(userinput != null){
@@ -580,10 +606,12 @@ nWaterHolderF <- function(userinput){
     return (numWaterfrontGen())
   }
 }
+
+nWaterHolder <- nWaterHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-nWindowHolder <- nWindowHolderF(correspondinguserinput)
 
 nWindowHolderF <- function(userinput){
   if(userinput != null){
@@ -593,10 +621,12 @@ nWindowHolderF <- function(userinput){
     return (numWindowFeaturesGen())
   }
 }
+
+nWindowHolder <- nWindowHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-nCommHolder <- nCommHolderF(correspondinguserinput)
 
 nCommHolderF <- function(userinput){
   if(userinput != null){
@@ -606,10 +636,12 @@ nCommHolderF <- function(userinput){
     return (numCommGen())
   }
 }
+
+nCommHolder <- nCommHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-sqFeetHolder <- sqFeetHolderF(correspondinguserinput)
 
 sqFeetHolderF <- function(userinput){
   if(userinput != null){
@@ -619,10 +651,12 @@ sqFeetHolderF <- function(userinput){
     return (sqFtGen())
   }
 }
+
+sqFeetHolder <- sqFeetHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-livSqFeetHolder <- livSqFeetHolderF(correspondinguserinput)
 
 livSqFeetHolderF <- function(userinput){
   if(userinput != null){
@@ -632,10 +666,12 @@ livSqFeetHolderF <- function(userinput){
     return (livSqFtGen())
   }
 }
+
+livSqFeetHolder <- livSqFeetHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-nPrimaryHolder <- nPrimaryHolderF(correspondinguserinput)
 
 nPrimaryHolderF <- function(userinput){
   if(userinput != null){
@@ -645,10 +681,12 @@ nPrimaryHolderF <- function(userinput){
     return (numPrimaryGen())
   }
 }
+
+nPrimaryHolder <- nPrimaryHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-nElementaryHolder <- nElementaryHolderF(correspondinguserinput)
 
 nElementaryHolderF <- function(userinput){
   if(userinput != null){
@@ -658,10 +696,12 @@ nElementaryHolderF <- function(userinput){
     return (numElementaryGen())
   }
 }
+
+nElementaryHolder <- nElementaryHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-nMiddleHolder <- nMiddleHolderF(correspondinguserinput)
 
 nMiddleHolderF <- function(userinput){
   if(userinput != null){
@@ -671,10 +711,12 @@ nMiddleHolderF <- function(userinput){
     return (numMiddleGen())
   }
 }
+
+nMiddleHolder <- nMiddleHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-nHighHolder <- nHighHolderF(correspondinguserinput)
 
 nHighHolderF <- function(userinput){
   if(userinput != null){
@@ -684,10 +726,12 @@ nHighHolderF <- function(userinput){
     return (numHighGen())
   }
 }
+
+nHighHolder <- nHighHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-nSchoolDistHolder <- nSchoolDistHolderF(correspondinguserinput)
 
 nSchoolDistHolderF <- function(userinput){
   if(userinput != null){
@@ -697,10 +741,12 @@ nSchoolDistHolderF <- function(userinput){
     return (numSchoolDistGen())
   }
 }
+
+nSchoolDistHolder <- nSchoolDistHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-schoolRatHolder <- schoolRatHolderF(correspondinguserinput)
 
 schoolRatHolderF <- function(userinput){
   if(userinput != null){
@@ -710,10 +756,12 @@ schoolRatHolderF <- function(userinput){
     return (schoolRatingGen())
   }
 }
+
+schoolRatHolder <- schoolRatHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-schSizeHolder <- schSizeHolderF(correspondinguserinput)
 
 schSizeHolderF <- function(userinput){
   if(userinput != null){
@@ -723,10 +771,12 @@ schSizeHolderF <- function(userinput){
     return (schoolSizeGen())
   }
 }
+
+schSizeHolder <- schSizeHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-stRatioHolder <- stRatioHolderF(correspondinguserinput)
 
 stRatioHolderF <- function(userinput){
   if(userinput != null){
@@ -736,12 +786,14 @@ stRatioHolderF <- function(userinput){
     return (stuTeachRatioGen())
   }
 }
+
+stRatioHolder <- stRatioHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-nBathHolder <- nBathHolderF(correspondinguserinput)
 
-nBHolderF <- function(userinput){
+nBathHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -749,10 +801,12 @@ nBHolderF <- function(userinput){
     return (numBathGen())
   }
 }
+
+nBathHolder <- nBathHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-nBedHolder <- nBedHolderF(correspondinguserinput)
 
 nBedHolderF <- function(userinput){
   if(userinput != null){
@@ -762,10 +816,12 @@ nBedHolderF <- function(userinput){
     return (numBedGen())
   }
 }
+
+nBedHolder <- nBedHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-nStoriesHolder <- nStoriesHolderF(correspondinguserinput)
 
 nStoriesHolderF <- function(userinput){
   if(userinput != null){
@@ -775,13 +831,10 @@ nStoriesHolderF <- function(userinput){
     return (numStoriesGen())
   }
 }
+
+nStoriesHolder <- nStoriesHolderF(correspondinguserinput)
+
 ```
-
-
-
-
-
-
 
 
 ```{r}
@@ -791,14 +844,19 @@ priceFinder <- function(propTR = propTRHolder, gSpaces = gSpacesHolder, hCooling
   simprice <- -1015868.0037958*propTR + 73706.5379144*gSpaces - 125057.2573133*hCooling -68388.0019782*hGarage - 150959.4909390*hAssoc -12573.6828740*hHeating + 75565.2831228*hSpa + 31737.201765*hView - 64615.0962348*pSpaces -976.7410605*yBuilt + 658.6923030*nPhotos + 12889.6133218*nAccess -2986.3553716*nApp + 43091.4178786*nPark + 13788.8077623*nPat + 2723.7220041*nSec + 640006.4840522*nWater -3377.8766265*nWindow -54456.4761282*nComm + 0.0004611*sqFeet + 87.1140864*livSqFeet + 162277.4549212*nPrimary + 210417.3458792*nElementary - 41107.4097195*nMiddle -92208.9544069*nHigh - 4590.8758825*nSchoolDist + 52539.0235992*schoolRat - 98.0439180*schSize - 15657.7305688*stRatio + 201067.6749276*nBath - 44520.3992813*nBed - 76892.1634096*nStories + 4177001.7951976
   return(simprice)
 }
+}
 ```
 
 
 ```{r}
 finalsimPriceFinder <- function(userinputvariablelist){
-  return(mean(rep(5,priceFinder(userinputvariablelist))))
+  return(mean(rep(5,priceFinder())))
 }
 ```
+
+
+<!-- start of actual app?? -->
+
 
 
 
