@@ -352,7 +352,7 @@ austinHousingDataClean1 <- dummy_cols(austinHousingDataClean1, select_columns = 
 <!-- and then for the regression function I take the redeclared variables above as parameters -->
 
 ```{r}
-propTRHolder <- propTRHolderF(correspondinguserinput)
+
 
 propTRHolderF <- function(userinput){
   if(userinput != null){
@@ -362,10 +362,11 @@ propTRHolderF <- function(userinput){
     return (propertyTaxRateGen())
   }
 }
+
+propTRHolder <- propTRHolderF(correspondinguserinput)
 ```
 
 ```{r}
-gSpacesHolder <- propTRHolderF(correspondinguserinput)
 
 gSpacesHolderF <- function(userinput){
   if(userinput != null){
@@ -375,10 +376,12 @@ gSpacesHolderF <- function(userinput){
     return (garageSpacesGen())
   }
 }
+
+gSpacesHolder <- propTRHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
 
 hCoolingHolderF <- function(userinput){
   if(userinput != null){
@@ -388,10 +391,12 @@ hCoolingHolderF <- function(userinput){
     return (hasCoolingGen())
   }
 }
+
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
-hGarageHolder <- hGarageHolderF(correspondinguserinput)
 
 hGarageHolderF <- function(userinput){
   if(userinput != null){
@@ -401,6 +406,9 @@ hGarageHolderF <- function(userinput){
     return (hasGarageGen())
   }
 }
+
+hGarageHolder <- hGarageHolderF(correspondinguserinput)
+
 ```
 
 ```{r}
@@ -429,7 +437,6 @@ hHeatingHolderF <- function(userinput){
 }
 ```
 
-<!-- undone -->
 ```{r}
 hSpaHolder <- hSpaHolderF(correspondinguserinput)
 
@@ -695,7 +702,7 @@ nSchoolDistHolderF <- function(userinput){
 ```{r}
 schoolRatHolder <- schoolRatHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+schoolRatHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -706,9 +713,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+schSizeHolder <- schSizeHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+schSizeHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -719,9 +726,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+stRatioHolder <- stRatioHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+stRatioHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -732,9 +739,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nBathHolder <- nBathHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nBHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -745,9 +752,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nBedHolder <- nBedHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nBedHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -758,9 +765,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nStoriesHolder <- nStoriesHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nStoriesHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
