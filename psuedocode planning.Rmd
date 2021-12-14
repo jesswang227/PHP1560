@@ -729,6 +729,60 @@ hCoolingHolderF <- function(userinput){
 }
 ```
 
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (stuTeachRatioGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numBathGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numBedGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numStoriesGen())
+  }
+}
+```
+
+
+
 
 
 
