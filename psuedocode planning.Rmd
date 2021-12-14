@@ -857,6 +857,9 @@ finalsimPriceFinder <- function(userinputvariablelist){
 
 <!-- start of actual app?? -->
 
+library(shiny)
+
+
 
 
 
