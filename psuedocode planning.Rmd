@@ -444,9 +444,9 @@ hSpaHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+hViewHolder <- hViewHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+hViewHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -457,9 +457,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+pSpacesHolder <- pSpacesHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+pSpacesHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -470,9 +470,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+yBuiltHolder <- yBuiltHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+yBuiltHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -482,23 +482,12 @@ hCoolingHolderF <- function(userinput){
 }
 ```
 
-```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
-
-hCoolingHolderF <- function(userinput){
-  if(userinput != null){
-    return userinput
-  }
-  else if(userinput == null){
-    return (priceChangesGen())
-  }
-}
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nPhotosHolder <- nPhotosHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nPhotosHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -509,9 +498,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nAccessHolder <- nAccessHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nAccessHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -522,9 +511,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nAppHolder <- nAppHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nAppHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -535,9 +524,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nParkHolder <- nParkHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nParkHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -548,9 +537,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nPatHolder <- nPatHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nPatHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -561,9 +550,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nSecHolder <- nSecHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nSecHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -574,9 +563,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nWaterHolder <- nWaterHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nWaterHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -587,9 +576,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nWindowHolder <- nWindowHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nWindowHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -600,9 +589,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nCommHolder <- nCommHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nCommHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -613,9 +602,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+sqFeetHolder <- sqFeetHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+sqFeetHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -626,9 +615,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+livSqFeetHolder <- livSqFeetHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+livSqFeetHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -639,9 +628,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nPrimaryHolder <- nPrimaryHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nPrimaryHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -652,9 +641,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nElementaryHolder <- nElementaryHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nElementaryHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -665,9 +654,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nMiddleHolder <- nMiddleHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nMiddleHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -678,9 +667,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nHighHolder <- nHighHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nHighHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -691,9 +680,9 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+nSchoolDistHolder <- nSchoolDistHolderF(correspondinguserinput)
 
-hCoolingHolderF <- function(userinput){
+nSchoolDistHolderF <- function(userinput){
   if(userinput != null){
     return userinput
   }
@@ -704,7 +693,7 @@ hCoolingHolderF <- function(userinput){
 ```
 
 ```{r}
-hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+schoolRatHolder <- schoolRatHolderF(correspondinguserinput)
 
 hCoolingHolderF <- function(userinput){
   if(userinput != null){
