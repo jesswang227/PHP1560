@@ -72,6 +72,7 @@ ui <- fluidPage(
         numericInput("hasAssociationInput", "If property has homeowner's association or not (1 for yes, 0 for no", value = 0, min = 0, max = 1),
         numericInput("hasHeatingInput", "If property has heating or not (1 for yes, 0 for no", value = 0, min = 0, max = 1),
         numericInput("hasSpaInput", "If property has spa or not (1 for yes, 0 for no", value = 0, min = 0, max = 1),
+        
       ),
 
       mainPanel(
