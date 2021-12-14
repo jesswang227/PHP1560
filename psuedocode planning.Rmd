@@ -232,7 +232,7 @@ numCommGen <- function(){
 
 ```{r}
 #generates random lot size in sq ft
-SqFtGen <- function(){
+sqFtGen <- function(){
   samp <- sample(austinHousingDataClean1$lotSizeSqFt, 5, replace=TRUE)
   return(mean(samp))
 }
@@ -415,6 +415,322 @@ hAssocHolderF <- function(userinput){
   }
 }
 ```
+
+```{r}
+hHeatingHolder <- hHeatingHolderF(correspondinguserinput)
+
+hHeatingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (hasHeatingGen())
+  }
+}
+```
+
+<!-- undone -->
+```{r}
+hSpaHolder <- hSpaHolderF(correspondinguserinput)
+
+hSpaHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (hasSpaGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (hasViewGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (parkingSpacesGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (yearBuiltGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (priceChangesGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numPhotosGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numAccessGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numAppGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numParkGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numPatPorchGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numSecurityGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numWaterfrontGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numWindowFeaturesGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numCommGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (sqFtGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (livSqFtGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numPrimaryGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numElementaryGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numMiddleGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numHighGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (numSchoolDistGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (schoolRatingGen())
+  }
+}
+```
+
+```{r}
+hCoolingHolder <- hCoolingHolderF(correspondinguserinput)
+
+hCoolingHolderF <- function(userinput){
+  if(userinput != null){
+    return userinput
+  }
+  else if(userinput == null){
+    return (schoolSizeGen())
+  }
+}
+```
+
+
+
 
 
 
